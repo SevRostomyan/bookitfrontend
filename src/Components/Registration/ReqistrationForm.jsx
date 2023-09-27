@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import '../../assets/Req.css'
+import '../../assets/Req.css';
 
 class Registration extends Component {
     constructor() {
@@ -9,6 +9,12 @@ class Registration extends Component {
             lastName: '',
             email: '',
             password: '',
+            errors: {
+                firstName: '',
+                lastName: '',
+                email: '',
+                password: '',
+            },
         };
     }
 
@@ -16,6 +22,47 @@ class Registration extends Component {
         const { name, value } = e.target;
         this.setState({ [name]: value });
     };
+
+    validateForm = () => {
+        const { firstName, lastName, email, password } = this.state;
+        const errors = {
+            firstName: '',
+            lastName: '',
+            email: '',
+            password: '',
+        };
+        let isValid = true;
+
+        if (!firstName) {
+            errors.firstName = 'Förnamn är obligatoriskt';
+            isValid = false;
+        }
+
+        if (!lastName) {
+            errors.lastName = 'Efternamn är obligatoriskt';
+            isValid = false;
+        }
+
+        if (!email) {
+            errors.email = 'E-post är obligatoriskt';
+            isValid = false;
+        } else if (!/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/i.test(email)) {
+            errors.email = 'Ogiltig e-postadress';
+            isValid = false;
+        }
+
+        if (!password) {
+            errors.password = 'Lösenord är obligatoriskt';
+            isValid = false;
+        } else if (password.length < 6) {
+            errors.password = 'Lösenord måste vara minst 6 tecken långt';
+            isValid = false;
+        }
+
+        this.setState({ errors });
+        return isValid;
+    };
+
 
     handleSubmit = (e) => {
         e.preventDefault();
@@ -71,6 +118,7 @@ class Registration extends Component {
                             required
                             placeholder='Lösenord'
                         />
+                        {/* <span className="error">{errors.password}</span> */}
                     </div>
                     <button type="submit">Registrera</button>
                 </form>
