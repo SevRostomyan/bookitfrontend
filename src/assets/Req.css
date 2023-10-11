@@ -7,8 +7,16 @@
     border-radius: 5px; */
 
     height: 100vh;
+    background-color: #004AAD;
+
 }
 
+.req-dig{
+    color: white;
+    padding: 2em;
+    background-color: #001C73;
+    border-radius: 2em;
+}
 
 .form-group {
     margin-bottom: 15px;
@@ -26,6 +34,7 @@ input[type="password"] {
     padding: 10px;
     /* border: none; ta bort kommentaren eft*/
     border-radius: 5px;
+    color: red;
 }
 
 button {

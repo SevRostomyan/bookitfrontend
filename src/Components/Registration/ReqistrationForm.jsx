@@ -73,7 +73,7 @@ class Registration extends Component {
     render() {
         return (
             <div className="registration">
-                <h2>Registrera dig</h2>
+                <h2 className="req-dig">Registrera dig</h2>
                 <form onSubmit={this.handleSubmit} className='form-reg'>
                     <div className="form-group">
                         <label></label>
