@@ -1,0 +1,41 @@
+.employee-dashboard {
+    background-color: #1E2A38;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    font-family: 'Arial', sans-serif;
+}
+
+.welcome-banner {
+    margin-bottom: 50px;
+    background-color: #2F3B52;
+    color: #FFFFFF;
+    padding: 20px 100px;
+    border-radius: 20px;
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+    width: 70%;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.dashboard-button {
+    margin: 20px 0;
+    background-color: #2F3B52;
+    color: #FFFFFF;
+    border: none;
+    padding: 20px 40px;
+    border-radius: 20px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    width: 50%;
+    text-align: center;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.dashboard-button:hover {
+    background-color: #40506A;
+}
