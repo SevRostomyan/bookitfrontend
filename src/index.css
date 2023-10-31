@@ -1,15 +1,15 @@
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+  monospace;
 }
 
 /* Nav */
@@ -62,12 +62,36 @@ main {
   max-width: 28rem;
 }
 
+.max-w-7xl {
+  max-width: 80rem;
+}
+
 .gap-4 {
   gap: 1rem;
 }
 
 .flex {
   display: flex;
+}
+
+.md-flex {
+  display: flex;
+}
+
+.flex-none {
+  flex: none;
+}
+
+.box-border {
+  box-sizing: border-box;
+}
+
+.rounded-lg {
+  border-radius: 0.5rem;
+}
+
+.drop-shadow-lg {
+  filter: drop-shadow(0 10px 8px rgb(0 0 0 / 0.04)) drop-shadow(0 4px 3px rgb(0 0 0 / 0.1));
 }
 
 /* Button */
@@ -142,14 +166,31 @@ main {
   color: #be123c;
 }
 
+.text-gray-600 {
+  color: #4b5563;
+}
+
 .text-xl {
   font-size: 1.25rem;
   line-height: 1.75rem;
 }
 
+.text-4xl {
+  font-size: 2.25rem;
+  line-height: 2.5rem;
+}
+
 .text-sm {
   font-size: .875rem;
   line-height: 1.25rem;
+}
+
+.font-light {
+  font-weight: 300 !important;
+}
+
+.leading-8 {
+  line-height: 2rem;
 }
 
 /* Margin */
@@ -167,8 +208,16 @@ main {
   margin-right: 0.5rem;
 }
 
+.mt-0 {
+  margin-top: 0;
+}
+
 .mt-4 {
   margin-top: 1rem;
+}
+
+.mt-6, .md-mt-6 {
+  margin-top: 1.5rem;
 }
 
 .mt-8 {
@@ -176,6 +225,10 @@ main {
 }
 
 /* Padding */
+
+.pr-4 {
+  padding-right: 1rem;
+}
 
 .pt-4 {
   padding-top: 1rem;
@@ -196,7 +249,20 @@ main {
   padding-bottom: 2rem;
 }
 
+.py-12 {
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+}
+
 /* Width & Height */
+
+.md-w-1\/2 {
+  width: 50%;
+}
+
+.w-1\/2 {
+  width: 50%;
+}
 
 .w-6 {
   width: 1.5rem;
@@ -230,4 +296,29 @@ main {
 
 .align-middle {
   vertical-align: middle;
+}
+
+/* Responsive */
+
+@media (min-width: 1024px) {
+
+  .md-mt-6 {
+    margin-top: 0;
+  }
+}
+
+@media only screen and (max-width: 769px) {
+
+  .md-w-1\/2 {
+    width: auto;
+  }
+
+  .md-flex {
+    display: initial;
+  }
+}
+
+@media only screen and (max-width: 1025px) {
+
+
 }
