@@ -1,4 +1,5 @@
 import './App.css';
+import Navbar from "./Components/nav/Navbar";
 import RegistrationForm from '../src/Components/Registration/ReqistrationForm';
 import BookingForm from '../src/Components/Booking/BookingForm';
 import BookedClean from '../src/Components/BookedCleanings/BookedClean'
@@ -13,6 +14,7 @@ function App() {
 
     return (
         <div className="App">
+            <Navbar />
             <RegistrationForm />
             <BookingForm />
             <BookedClean />
