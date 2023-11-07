@@ -1,0 +1,32 @@
+.auth-form {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.login-form, .register-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.auth-form label {
+    text-align: left;
+    padding: 0.25rem 0;
+    color: #4b5563;
+}
+
+.auth-form .form-input {
+    width: auto;
+    border: 2px solid transparent;
+    margin: 0.5rem 0;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    background-color: #e5e7eb;
+    -webkit-transition: 0.5s;
+    transition: 0.5s;
+    outline: none;
+}
+
+.auth-form .form-input:focus {
+    border: 2px solid #001C73;
+}

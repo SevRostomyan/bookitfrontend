@@ -62,6 +62,10 @@ main {
   max-width: 28rem;
 }
 
+.max-w-xl {
+  max-width: 36rem;
+}
+
 .max-w-7xl {
   max-width: 80rem;
 }
@@ -124,6 +128,19 @@ main {
 
 .button-secondary:hover {
   background-color: #14318f;
+}
+
+.button-white {
+  color: #001C73;
+  background-color: #ffffff;
+  border-radius: 0.5rem;
+  -webkit-transition: 0.5s;
+  transition: 0.5s;
+}
+
+.button-white:hover {
+  background-color: #007bff;
+  color: #ffffff;
 }
 
 .button-link {
@@ -296,6 +313,14 @@ main {
 
 .align-middle {
   vertical-align: middle;
+}
+
+/* Card */
+
+.card {
+  padding: 2rem;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.12);
+  border-radius: 1rem;
 }
 
 /* Responsive */
