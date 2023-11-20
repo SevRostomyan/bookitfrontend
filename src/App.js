@@ -5,6 +5,7 @@ import Home from "./Components/pages/Home";
 import Register from "./Components/pages/Register";
 import Booking from "./Components/pages/Booking";
 import Login from "./Components/pages/Login";
+import BookingHistoryComponent from "./Components/Booking/BookingHistoryComponent";
 
 
 function App() {
@@ -15,6 +16,7 @@ function App() {
                 <Routes>
                     <Route path="/" element={<Home />} />
                     <Route path="/booking" element={<Booking />} />
+                    <Route path="/history" element={<BookingHistoryComponent />} />
                     <Route path="/login" element={<Login />} />
                     <Route path="/register" element={<Register />} />
                 </Routes>

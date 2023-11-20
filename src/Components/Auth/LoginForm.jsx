@@ -90,6 +90,21 @@ class LoginForm extends Component {
                                 <span className="ml-2">Logga in</span>
                             </h2>
                         </div>
+
+                        <div className="pb-2 mt-4">
+                            <div className="form-input">
+                                <label>Logga in som</label>
+                                <select
+                                    name="login_as"
+                                >
+                                    <option value="" disabled>-- Logga in som --</option>
+                                    <option value="kund">Kund</option>
+                                    <option value="admin">Admin</option>
+                                    <option value="stadare">Städare</option>
+                                </select>
+                            </div>
+                        </div>
+
                         <form onSubmit={this.handleSubmit} className="login-form">
                             <label htmlFor="email">E-post</label>
                             <input
