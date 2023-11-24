@@ -1,31 +1,32 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import '../../assets/Req.css';
 
-class Registration extends Component {
-  constructor() {
-    super();
-    this.state = {
-      firstName: '',
-      lastName: '',
-      email: '',
-      password: '',
-      errors: {
-        firstName: '',
-        lastName: '',
-        email: '',
-        password: '',
-      },
-    };
-  }
+const Registration = () => {
+  const [formData, setFormData] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    password: '',
+  });
 
-  handleInputChange = (e) => {
+  const [errors, setErrors] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    password: '',
+  });
+
+  const handleInputChange = (e) => {
     const { name, value } = e.target;
-    this.setState({ [name]: value });
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
   };
 
-  validateForm = () => {
-    const { firstName, lastName, email, password } = this.state;
-    const errors = {
+  const validateForm = () => {
+    const { firstName, lastName, email, password } = formData;
+    const newErrors = {
       firstName: '',
       lastName: '',
       email: '',
@@ -34,38 +35,38 @@ class Registration extends Component {
     let isValid = true;
 
     if (!firstName) {
-      errors.firstName = 'Förnamn är obligatoriskt';
+      newErrors.firstName = 'Förnamn är obligatoriskt';
       isValid = false;
     }
 
     if (!lastName) {
-      errors.lastName = 'Efternamn är obligatoriskt';
+      newErrors.lastName = 'Efternamn är obligatoriskt';
       isValid = false;
     }
 
     if (!email) {
-      errors.email = 'E-post är obligatoriskt';
+      newErrors.email = 'E-post är obligatoriskt';
       isValid = false;
     } else if (!/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/i.test(email)) {
-      errors.email = 'Ogiltig e-postadress';
+      newErrors.email = 'Ogiltig e-postadress';
       isValid = false;
     }
 
     if (!password) {
-      errors.password = 'Lösenord är obligatoriskt';
+      newErrors.password = 'Lösenord är obligatoriskt';
       isValid = false;
     } else if (password.length < 6) {
-      errors.password = 'Lösenord måste vara minst 6 tecken långt';
+      newErrors.password = 'Lösenord måste vara minst 6 tecken långt';
       isValid = false;
     }
 
-    this.setState({ errors });
+    setErrors(newErrors);
     return isValid;
   };
 
-  handleSubmit = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (this.validateForm()) {
+    if (validateForm()) {
       try {
         const response = await fetch('http://localhost:7878/api/auth/register', {
           method: 'POST',
@@ -73,11 +74,11 @@ class Registration extends Component {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            firstname: this.state.firstName,
-            lastname: this.state.lastName,
-            role: 'ADMIN', // Användaren har en ADMIN-roll enligt ditt exempel, justera vid behov
-            email: this.state.email,
-            password: this.state.password,
+            firstname: formData.firstName,
+            lastname: formData.lastName,
+            role: 'KUND',
+            email: formData.email,
+            password: formData.password,
           }),
         });
 
@@ -92,60 +93,62 @@ class Registration extends Component {
     }
   };
 
-  render() {
-    return (
-        <div className="registration">
-          <h2>Registrera dig</h2>
-          <form onSubmit={this.handleSubmit} className='form-reg'>
-            <div className="form-group">
-              <label></label>
-              <input
-                  type="text"
-                  name="firstName"
-                  value={this.state.firstName}
-                  onChange={this.handleInputChange}
-                  required
-                  placeholder='Förnamn'
-              />
-            </div>
-            <div className="form-group">
-              <label></label>
-              <input
-                  type="text"
-                  name="lastName"
-                  value={this.state.lastName}
-                  onChange={this.handleInputChange}
-                  required
-                  placeholder='Efternamn'
-              />
-            </div>
-            <div className="form-group">
-              <label></label>
-              <input
-                  type="email"
-                  name="email"
-                  value={this.state.email}
-                  onChange={this.handleInputChange}
-                  required
-                  placeholder='E-post'
-              />
-            </div>
-            <div className="form-group">
-              <label></label>
-              <input
-                  type="password"
-                  name="password"
-                  value={this.state.password}
-                  onChange={this.handleInputChange}
-                  required
-                  placeholder='Lösenord'
-              />
-            </div>
-            <button type="submit">Registrera</button>
-          </form>
-        </div>
-    );
-  }
-}
+  return (
+      <div className="registration">
+        <h2>Registrera dig</h2>
+        <form onSubmit={handleSubmit} className='form-reg'>
+          <div className="form-group">
+            <label></label>
+            <input
+                type="text"
+                name="firstName"
+                value={formData.firstName}
+                onChange={handleInputChange}
+                required
+                placeholder='Förnamn'
+            />
+            {errors.firstName && <span className="text-sm text-danger">{errors.firstName}</span>}
+          </div>
+          <div className="form-group">
+            <label></label>
+            <input
+                type="text"
+                name="lastName"
+                value={formData.lastName}
+                onChange={handleInputChange}
+                required
+                placeholder='Efternamn'
+            />
+            {errors.lastName && <span className="text-sm text-danger">{errors.lastName}</span>}
+          </div>
+          <div className="form-group">
+            <label></label>
+            <input
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleInputChange}
+                required
+                placeholder='E-post'
+            />
+            {errors.email && <span className="text-sm text-danger">{errors.email}</span>}
+          </div>
+          <div className="form-group">
+            <label></label>
+            <input
+                type="password"
+                name="password"
+                value={formData.password}
+                onChange={handleInputChange}
+                required
+                placeholder='Lösenord'
+            />
+            {errors.password && <span className="text-sm text-danger">{errors.password}</span>}
+          </div>
+          <button type="submit">Registrera</button>
+        </form>
+      </div>
+  );
+};
 
 export default Registration;

@@ -1,46 +1,47 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import '../../assets/Booking.css';
 
-class BookingForm extends Component {
-  constructor() {
-    super();
-    this.state = {
-      cleaningType: '',
-      desiredDate: '',
-      message: '',
-      errors: {
-        cleaningType: '',
-        desiredDate: '',
-        message: '',
-      },
-    };
-  }
+const BookingForm = () => {
+  const [formData, setFormData] = useState({
+    cleaningType: '',
+    desiredDate: '',
+    message: '',
+  });
 
-  handleInputChange = (e) => {
+  const [errors, setErrors] = useState({
+    cleaningType: '',
+    desiredDate: '',
+    message: '',
+  });
+
+  const handleInputChange = (e) => {
     const { name, value } = e.target;
-    this.setState({ [name]: value });
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
   };
 
-  validateForm = () => {
-    const { desiredDate } = this.state;
-    const errors = {
+  const validateForm = () => {
+    const { desiredDate } = formData;
+    const newErrors = {
       desiredDate: '',
       message: '',
     };
     let isValid = true;
 
     if (!desiredDate) {
-      errors.desiredDate = 'Välj önskat datum';
+      newErrors.desiredDate = 'Välj önskat datum';
       isValid = false;
     }
 
-    this.setState({ errors });
+    setErrors(newErrors);
     return isValid;
   };
 
-  handleSubmit = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (this.validateForm()) {
+    if (validateForm()) {
       try {
         const response = await fetch('http://localhost:7878/api/bokning/bookCleaning', {
           method: 'POST',
@@ -48,9 +49,9 @@ class BookingForm extends Component {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            städningsAlternativ: this.state.cleaningType,
-            bookingTime: this.state.desiredDate,
-            messageAtBooking: this.state.message,
+            städningsAlternativ: formData.cleaningType,
+            bookingTime: formData.desiredDate,
+            messageAtBooking: formData.message,
           }),
         });
 
@@ -65,50 +66,48 @@ class BookingForm extends Component {
     }
   };
 
-  render() {
-    return (
-        <div className="booking-container">
-          <div className="booking-form">
-            <h2>Boka en städning</h2>
-            <form onSubmit={this.handleSubmit}>
-              <div className="form-group">
-                <label>Typ av städning</label>
-                <select
-                    name="cleaningType"
-                    value={this.state.cleaningType}
-                    onChange={this.handleInputChange}
-                >
-                  <option value="">-- Välj städtyp --</option>
-                  <option value="BASIC">Basic Städning</option>
-                  <option value="TOPP">Topp Städning</option>
-                  <option value="DIAMANT">Diamant Städning</option>
-                  <option value="FÖNSTERTVÄTT">Fönstertvätt</option>
-                </select>
-              </div>
-              <div className="form-group">
-                <label>Datum för städning</label>
-                <input
-                    type="date"
-                    value={this.state.desiredDate}
-                    onChange={this.handleInputChange}
-                    name="desiredDate"
-                />
-              </div>
-              <div className="form-group">
-                <label>Meddelande</label>
-                <textarea
-                    name="message"
-                    value={this.state.message}
-                    onChange={this.handleInputChange}
-                    placeholder="Lägg till meddelande..."
-                />
-              </div>
-              <button type="submit">Boka</button>
-            </form>
-          </div>
+  return (
+      <div className="booking-container">
+        <div className="booking-form">
+          <h2>Boka en städning</h2>
+          <form onSubmit={handleSubmit}>
+            <div className="form-group">
+              <label>Typ av städning</label>
+              <select
+                  name="cleaningType"
+                  value={formData.cleaningType}
+                  onChange={handleInputChange}
+              >
+                <option value="">-- Välj städtyp --</option>
+                <option value="BASIC">Basic Städning</option>
+                <option value="TOPP">Topp Städning</option>
+                <option value="DIAMANT">Diamant Städning</option>
+                <option value="FÖNSTERTVÄTT">Fönstertvätt</option>
+              </select>
+            </div>
+            <div className="form-group">
+              <label>Datum för städning</label>
+              <input
+                  type="date"
+                  value={formData.desiredDate}
+                  onChange={handleInputChange}
+                  name="desiredDate"
+              />
+            </div>
+            <div className="form-group">
+              <label>Meddelande</label>
+              <textarea
+                  name="message"
+                  value={formData.message}
+                  onChange={handleInputChange}
+                  placeholder="Lägg till meddelande..."
+              />
+            </div>
+            <button type="submit">Boka</button>
+          </form>
         </div>
-    );
-  }
-}
+      </div>
+  );
+};
 
 export default BookingForm;
