@@ -70,6 +70,8 @@ class LoginForm extends Component {
                 console.log('Authentication response:', result);
 
                 // Om autentiseringen är framgångsrik, kan du hantera svaret här (exempelvis, spara token i localStorage).
+                const data = await response.json();
+                if (data.token) {   localStorage.setItem('jwtToken', data.token); }
 
             } catch (error) {
                 console.error('Error making authentication request:', error);
