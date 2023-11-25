@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import './../../assets/auth.css';
+import CustomerDashboard from './../Dashboard/CustomerDashboard';
 
 class LoginForm extends Component {
     constructor() {
@@ -130,7 +131,7 @@ class LoginForm extends Component {
                             />
                             {this.state.errors.password && <span className="text-sm text-danger">{this.state.errors.password}</span>}
 
-                            <button className="button button-primary mt-8" type="submit">
+                            <button className="button button-primary mt-8" type="submit" onClick={CustomerDashboard}>
                                 Logga in
                             </button>
                         </form>
