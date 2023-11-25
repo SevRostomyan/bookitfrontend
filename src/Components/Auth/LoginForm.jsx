@@ -55,12 +55,11 @@ class LoginForm extends Component {
         e.preventDefault();
         if (this.validateForm()) {
             try {
-                const token = localStorage.getItem('jwtToken');
-                console.log("Retrieved Token:", token);
+
                 const response = await fetch('http://localhost:7878/api/auth/authenticate', {
                     method: 'POST',
                     headers: {
-                        'Authorization': `Bearer ${token}`,
+
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({
@@ -69,8 +68,8 @@ class LoginForm extends Component {
                     }),
                 });
 
-                const result = await response.json();
-                console.log('Authentication response:', result);
+
+
 
                 // Om autentiseringen är framgångsrik, kan du hantera svaret här (exempelvis, spara token i localStorage).
                 const data = await response.json();
