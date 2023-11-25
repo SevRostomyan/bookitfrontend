@@ -55,9 +55,11 @@ class LoginForm extends Component {
         e.preventDefault();
         if (this.validateForm()) {
             try {
+                const token = localStorage.getItem('jwtToken');
                 const response = await fetch('http://localhost:7878/api/auth/authenticate', {
                     method: 'POST',
                     headers: {
+                        'Authorization': `Bearer ${token}`,
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({
@@ -71,7 +73,9 @@ class LoginForm extends Component {
 
                 // Om autentiseringen är framgångsrik, kan du hantera svaret här (exempelvis, spara token i localStorage).
                 const data = await response.json();
-                if (data.token) {   localStorage.setItem('jwtToken', data.token); }
+                if (data.token) {
+                    localStorage.setItem('jwtToken', data.token);
+                }
 
             } catch (error) {
                 console.error('Error making authentication request:', error);
