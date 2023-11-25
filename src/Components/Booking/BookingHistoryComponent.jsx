@@ -11,7 +11,7 @@ class BookingHistoryComponent extends Component {
             <div>
                 <h1 className="text-xl">Bokningshistorik</h1>
 
-                <div className="auth-form container-xl mx-auto px-8">
+                <div className="container-xl mx-auto px-8">
                     <div className="card w-full">
                         <table className="table-booking w-full">
                             <thead>

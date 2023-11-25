@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import './../../assets/auth.css';
-import {Link} from "react-router-dom";
+
 class LoginForm extends Component {
     constructor() {
         super();
@@ -49,16 +50,29 @@ class LoginForm extends Component {
         return isValid;
     };
 
-    handleSubmit = (e) => {
+    handleSubmit = async (e) => {
         e.preventDefault();
-
-        // Anropa validateForm-funktionen för att utföra validering.
         if (this.validateForm()) {
-            // Om formuläret är giltigt kan du fortsätta med att skicka data till servern eller utföra andra åtgärder.
-            // Till exempel:
-            // Du kan skicka data till servern eller utföra andra åtgärder.
-            console.log("Formuläret är giltigt. Skickar data...");
-            console.log(this.state);
+            try {
+                const response = await fetch('http://localhost:7878/api/auth/authenticate', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        email: this.state.email,
+                        password: this.state.password,
+                    }),
+                });
+
+                const result = await response.json();
+                console.log('Authentication response:', result);
+
+                // Om autentiseringen är framgångsrik, kan du hantera svaret här (exempelvis, spara token i localStorage).
+
+            } catch (error) {
+                console.error('Error making authentication request:', error);
+            }
         }
     };
 
@@ -73,39 +87,57 @@ class LoginForm extends Component {
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" />
                                 </svg>
 
-
                                 <span className="ml-2">Logga in</span>
                             </h2>
                         </div>
+
+                        <div className="pb-2 mt-4">
+                            <div className="form-input">
+                                <label>Logga in som</label>
+                                <select
+                                    name="login_as"
+                                >
+                                    <option value="" disabled>-- Logga in som --</option>
+                                    <option value="kund">Kund</option>
+                                    <option value="admin">Admin</option>
+                                    <option value="stadare">Städare</option>
+                                </select>
+                            </div>
+                        </div>
+
                         <form onSubmit={this.handleSubmit} className="login-form">
                             <label htmlFor="email">E-post</label>
-                            <input value={this.state.email}
-                                   onChange={this.handleInputChange}
-                                   className="form-input"
-                                   id="email"
-                                   type="email"
-                                   name="email"
-                                   placeholder="E-post"/>
-                            {this.state.errors.email && (
-                                <span className="text-sm text-danger">{this.state.errors.email}</span>
-                            )}
+                            <input
+                                value={this.state.email}
+                                onChange={this.handleInputChange}
+                                className="form-input"
+                                id="email"
+                                type="email"
+                                name="email"
+                                placeholder="E-post"
+                            />
+                            {this.state.errors.email && <span className="text-sm text-danger">{this.state.errors.email}</span>}
 
                             <label htmlFor="password">Lösenord</label>
-                            <input value={this.state.password}
-                                   onChange={this.handleInputChange}
-                                   className="form-input"
-                                   id="password"
-                                   type="password"
-                                   name="password"
-                                   placeholder="******"/>
-                            {this.state.errors.password && (
-                                <span className="text-sm text-danger">{this.state.errors.password}</span>
-                            )}
+                            <input
+                                value={this.state.password}
+                                onChange={this.handleInputChange}
+                                className="form-input"
+                                id="password"
+                                type="password"
+                                name="password"
+                                placeholder="******"
+                            />
+                            {this.state.errors.password && <span className="text-sm text-danger">{this.state.errors.password}</span>}
 
-                            <button className="button button-primary mt-8" type="submit">Logga in</button>
+                            <button className="button button-primary mt-8" type="submit">
+                                Logga in
+                            </button>
                         </form>
                         <div className="mt-6">
-                            <Link to="/register" className="button button-link mt-4">Har du inget konto? Registrera</Link>
+                            <Link to="/register" className="button button-link mt-4">
+                                Har du inget konto? Registrera
+                            </Link>
                         </div>
                     </div>
                 </div>

@@ -32,6 +32,7 @@ export default function Navbar() {
                                     </Link>
                                 </li>
                                 <li><Link to="/booking" className="button button-link">Bokning</Link></li>
+                                <li><Link to="/history" className="button button-link">Historik</Link></li>
                             </ul>
 
                             <div className="p-4"><hr/></div>
@@ -69,9 +70,8 @@ export default function Navbar() {
                     </svg>
                 </Link>
                 <ul className="flex gap-4">
-                    <li>
-                        <Link to="/booking" className="button button-primary">Bokning</Link>
-                    </li>
+                    <li><Link to="/booking" className="button button-primary">Bokning</Link></li>
+                    <li><Link to="/history" className="button button-primary">Historik</Link></li>
                 </ul>
                 <ul className="flex gap-4">
                     <li><Link to="/login" className="button button-white">Logga in</Link></li>
