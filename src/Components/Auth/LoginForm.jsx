@@ -2,10 +2,11 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import './../../assets/auth.css';
 import CustomerDashboard from './../Dashboard/CustomerDashboard';
+import { withNavigation } from '../withNavigation'; // Adjust the path as necessary
 
 class LoginForm extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
             email: '',
             password: '',
@@ -75,6 +76,7 @@ class LoginForm extends Component {
                 const data = await response.json();
                 if (data.token) {
                     localStorage.setItem('jwtToken', data.token);
+                    this.props.history.push('/customer-dashboard');
                 }
 
             } catch (error) {
@@ -153,4 +155,4 @@ class LoginForm extends Component {
     }
 }
 
-export default LoginForm;
+export default withNavigation(LoginForm);
