@@ -56,6 +56,7 @@ class LoginForm extends Component {
         if (this.validateForm()) {
             try {
                 const token = localStorage.getItem('jwtToken');
+                console.log("Retrieved Token:", token);
                 const response = await fetch('http://localhost:7878/api/auth/authenticate', {
                     method: 'POST',
                     headers: {
