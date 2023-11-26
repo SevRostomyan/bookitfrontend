@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import './../../assets/auth.css';
-import CustomerDashboard from './../Dashboard/CustomerDashboard';
-import { withNavigation } from '../withNavigation'; // Adjust the path as necessary
+import { withNavigation } from '../withNavigation'; //
 
 class LoginForm extends Component {
     constructor(props) {
@@ -70,13 +69,11 @@ class LoginForm extends Component {
                 });
 
 
-
-
                 // Om autentiseringen är framgångsrik, kan du hantera svaret här (exempelvis, spara token i localStorage).
                 const data = await response.json();
                 if (data.token) {
                     localStorage.setItem('jwtToken', data.token);
-                    this.props.history.push('/customer-dashboard');
+                    this.props.navigate('/customer-dashboard');
                 }
 
             } catch (error) {
@@ -139,7 +136,7 @@ class LoginForm extends Component {
                             />
                             {this.state.errors.password && <span className="text-sm text-danger">{this.state.errors.password}</span>}
 
-                            <button className="button button-primary mt-8" type="submit" onClick={CustomerDashboard}>
+                            <button className="button button-primary mt-8" type="submit">
                                 Logga in
                             </button>
                         </form>

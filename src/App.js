@@ -6,7 +6,7 @@ import Register from "./Components/pages/Register";
 import Booking from "./Components/pages/Booking";
 import Login from "./Components/pages/Login";
 import BookingHistoryComponent from "./Components/Booking/BookingHistoryComponent";
-
+import CustomerDashboard from "./Components/Dashboard/CustomerDashboard";
 
 function App() {
     return (
@@ -19,6 +19,8 @@ function App() {
                     <Route path="/history" element={<BookingHistoryComponent />} />
                     <Route path="/login" element={<Login />} />
                     <Route path="/register" element={<Register />} />
+                    <Route path="/customer-dashboard" element={<CustomerDashboard />} />
+
                 </Routes>
             </main>
         </div>
