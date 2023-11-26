@@ -7,6 +7,7 @@ const CustomerDashboard = () => {
     const navigate = useNavigate();
 
 
+
     const handleNewBookingClick = () => {
         // Navigate to the Booking component where booking-form,BookedClean and CleaningApproval components are also located to handle bookings
         navigate('/booking');
