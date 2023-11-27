@@ -4,6 +4,8 @@ import BookedClean from "../BookedCleanings/BookedClean";
 import '../../assets/CleaningApproval.css';
 import CleaningApproval from "../CleaningApproval1/CleaningApproval";
 
+
+
 class Booking extends Component {
     render() {
         const cleaningData = {
