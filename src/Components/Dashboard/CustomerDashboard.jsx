@@ -110,15 +110,16 @@ const CustomerDashboard = () => {
     };
 
     return (
-        <div className="customer-dashboard">
-            <div className="welcome-message">
-                VÄLKOMMEN USER
+        <div className="dashboard">
+            <div className="dashboard-welcome">
+                KUND
             </div>
-            <div className="options">
-                <button className="option-button" onClick={handleNewBookingClick}>NY BOKNING</button>
-                <button className="option-button" onClick={handleMyBookingsClick}>MINA BOKNINGAR</button>
-                <button className="option-button" onClick={handleHistoryClick}>HISTORIK</button>
-                <button className="option-button" onClick={handlePaymentMethodsClick}>BETALNINGSMETODER</button>
+            <div className="dashboard-options">
+                <button className="dashboard-button">NY BOKNING</button>
+                <button className="dashboard-button">MINA BOKNINGAR</button>
+                <button className="dashboard-button">HISTORIK</button>
+                <button className="dashboard-button">BETALNINGSMETODER</button>
+
             </div>
         </div>
     );
