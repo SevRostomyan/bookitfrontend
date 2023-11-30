@@ -1,5 +1,5 @@
 import React from 'react';
-import '../../assets/CustomerDash.css';
+import '../../assets/Dashboard.css';
 
 const CustomerDashboard = () => {
     const handleNewBookingClick = () => {
