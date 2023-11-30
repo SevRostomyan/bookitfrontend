@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import './../../assets/auth.css';
+import { withNavigation } from '../withNavigation'; //
 
 class LoginForm extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
             email: '',
             password: '',
@@ -54,9 +55,11 @@ class LoginForm extends Component {
         e.preventDefault();
         if (this.validateForm()) {
             try {
+
                 const response = await fetch('http://localhost:7878/api/auth/authenticate', {
                     method: 'POST',
                     headers: {
+
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({
@@ -65,10 +68,13 @@ class LoginForm extends Component {
                     }),
                 });
 
-                const result = await response.json();
-                console.log('Authentication response:', result);
 
                 // Om autentiseringen är framgångsrik, kan du hantera svaret här (exempelvis, spara token i localStorage).
+                const data = await response.json();
+                if (data.token) {
+                    localStorage.setItem('jwtToken', data.token);
+                    this.props.navigate('/customer-dashboard');
+                }
 
             } catch (error) {
                 console.error('Error making authentication request:', error);
@@ -146,4 +152,4 @@ class LoginForm extends Component {
     }
 }
 
-export default LoginForm;
+export default withNavigation(LoginForm);

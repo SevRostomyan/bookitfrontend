@@ -7,6 +7,7 @@ const BookingForm = () => {
   const [formData, setFormData] = useState({
     cleaningType: '',
     desiredDate: '',
+    desiredTime: '',
     message: '',
   });
 
@@ -45,25 +46,41 @@ const BookingForm = () => {
     e.preventDefault();
     if (validateForm()) {
       try {
+        const bookingDateTime = `${formData.desiredDate}T${formData.desiredTime}`;
+        const token = localStorage.getItem('jwtToken'); // Retrieve the token from localStorage
+
         const response = await fetch('http://localhost:7878/api/bokning/bookCleaning', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}` // Include the token in the Authorization header
           },
           body: JSON.stringify({
             städningsAlternativ: formData.cleaningType,
-            bookingTime: formData.desiredDate,
+            bookingTime: bookingDateTime,
+            adress: 'Din adress',
             messageAtBooking: formData.message,
           }),
         });
+        const contentType = response.headers.get("Content-Type");
 
-        const result = await response.json();
-        console.log('POST response:', result);
-
-        // Du kan hantera svaret här och uppdatera din komponent om det behövs.
-
+        if (response.ok) {
+          if (contentType && contentType.includes("application/json")) {
+          const result = await response.json();
+          console.log('POST response:', result);
+            // Handle the JSON response here
+          // Du kan hantera svaret här och uppdatera din komponent om det behövs.
+        } else {
+            const textResult = await response.text();
+            console.log('POST response:', textResult);
+            // Handle the text response here
+          }
+        }
+          else {
+          console.error('Server responded with non-OK status:', response.status);
+        }
       } catch (error) {
-        console.error('Error making POST request:', error);
+        console.error('Error during fetch or response handling:', error);
       }
     }
   };
@@ -81,10 +98,10 @@ const BookingForm = () => {
                   onChange={handleInputChange}
               >
                 <option value="">-- Välj städtyp --</option>
-                <option value="BASIC">Basic Städning</option>
-                <option value="TOPP">Topp Städning</option>
-                <option value="DIAMANT">Diamant Städning</option>
-                <option value="FÖNSTERTVÄTT">Fönstertvätt</option>
+                <option value="BASIC">Basic Städning - 800:-</option>
+                <option value="TOPP">Topp Städning - 1000:-</option>
+                <option value="DIAMANT">Diamant Städning - 1500:-</option>
+                <option value="FÖNSTERTVÄTT">Fönstertvätt - 1800:-</option>
               </select>
             </div>
             <div className="form-group">
@@ -94,6 +111,24 @@ const BookingForm = () => {
                   value={formData.desiredDate}
                   onChange={handleInputChange}
                   name="desiredDate"
+              />
+            </div>
+            <div className="form-group">
+              <label>Tid för städning</label>
+              <input
+                  type="time"
+                  value={formData.desiredTime}
+                  onChange={handleInputChange}
+                  name="desiredTime"
+              />
+            </div>
+            <div className="form-group">
+              <label>Adress</label>
+              <textarea className={"textarea2"}
+                  name="adress"
+                  value={formData.adress}
+                  onChange={handleInputChange}
+                  placeholder="Ange adress"
               />
             </div>
             <div className="form-group">

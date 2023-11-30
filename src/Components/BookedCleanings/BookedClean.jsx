@@ -8,7 +8,7 @@ const Bookings = () => {
     const fetchBookings = async () => {
       try {
         // Hämta token från localStorage om det finns
-        const token = localStorage.getItem('authToken');
+        const token = localStorage.getItem('jwtToken');
 
         // Kontrollera om token finns innan du gör fetch-anropet
         if (token) {
@@ -16,12 +16,15 @@ const Bookings = () => {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
-              Authorization: `Bearer ${token}`, // Lägg till Bearer Token i headern
+              'Authorization': `Bearer ${token}`//Lägg till Bearer Token i headern
             },
           });
-
-          const data = await response.json();
-          setBookings(data);
+          if (response.ok) {
+            const data = await response.json();
+            setBookings(data);
+          } else {
+            console.log('Server responded with non-OK status:', response.status);
+          }
         } else {
           console.log('Ingen autentiserings-token tillgänglig.');
         }
@@ -43,9 +46,12 @@ const Bookings = () => {
               {bookings.map((booking, index) => (
                   <li key={index}>
                     <h3>Städning {index + 1}</h3>
-                    <p>Datum: {booking.date}</p>
-                    <p>Tid: {booking.time}</p>
-                    <p>Städföretag: {booking.cleaningCompany}</p>
+                    <p>Boknings-ID: {booking.id}</p>
+                    <p>Datum och tid: {booking.bookingTime}</p>
+                    <p>Adress: {booking.adress}</p>
+                    <p>Meddelande vid bokning: {booking.messageAtBooking}</p>
+                    <p>Status: {booking.status}</p>
+                    <p>Rapportstatus: {booking.cleaningReportStatus}</p>
                   </li>
               ))}
             </ul>
