@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import React, {Component} from 'react';
+import {Link} from 'react-router-dom';
 import './../../assets/auth.css';
-import { withNavigation } from '../withNavigation'; //
+import {withNavigation} from '../withNavigation'; //
 
 class LoginForm extends Component {
     constructor(props) {
@@ -17,12 +17,12 @@ class LoginForm extends Component {
     }
 
     handleInputChange = (e) => {
-        const { name, value } = e.target;
-        this.setState({ [name]: value });
+        const {name, value} = e.target;
+        this.setState({[name]: value});
     };
 
     validateForm = () => {
-        const { email, password } = this.state;
+        const {email, password} = this.state;
 
         const errors = {
             email: '',
@@ -47,7 +47,7 @@ class LoginForm extends Component {
             isValid = false;
         }
 
-        this.setState({ errors });
+        this.setState({errors});
         return isValid;
     };
 
@@ -65,19 +65,40 @@ class LoginForm extends Component {
                     body: JSON.stringify({
                         email: this.state.email,
                         password: this.state.password,
+                        intendedRole: this.state.role, // Include the role selected by the user
                     }),
                 });
 
 
                 // Om autentiseringen är framgångsrik, kan du hantera svaret här (exempelvis, spara token i localStorage).
                 const data = await response.json();
-                if (data.token) {
-                    localStorage.setItem('jwtToken', data.token);
-                    this.props.navigate('/customer-dashboard');
-                }
 
+                if (data.errorMessage) {
+                    this.setState({unauthorizedAccessMessage: data.errorMessage});
+                } else if (data.token) {
+                    localStorage.setItem('jwtToken', data.token);
+                    console.log(this.state.role)
+                    // Redirect based on role
+                    switch (data.role) {
+                        case 'ADMIN':
+                            this.props.navigate('/admin-dashboard');
+                            break;
+                        case 'KUND':
+                            this.props.navigate('/customer-dashboard');
+                            break;
+                        case 'STÄDARE':
+                            this.props.navigate('/employee-dashboard');
+                            break;
+                        // ... Handle other roles ...
+                        default:
+                            // Default redirect or error handling
+                            break;
+                    }
+                }
             } catch (error) {
                 console.error('Error making authentication request:', error);
+                // Handle the error appropriately here
+                // e.g., set an error state, show error message to user, etc.
             }
         }
     };
@@ -89,24 +110,35 @@ class LoginForm extends Component {
                     <div className="card ">
                         <div>
                             <h2 className="text-xl flex items-center justify-center">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6 text-primary">
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" />
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                     strokeWidth="1.5" stroke="currentColor" className="w-6 h-6 text-primary">
+                                    <path strokeLinecap="round" strokeLinejoin="round"
+                                          d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9"/>
                                 </svg>
 
                                 <span className="ml-2">Logga in</span>
                             </h2>
                         </div>
 
+                        {/* Display unauthorized access message */}
+                        {this.state.unauthorizedAccessMessage && (
+                            <div className="alert alert-danger">
+                                {this.state.unauthorizedAccessMessage}
+                            </div>
+                        )}
+
                         <div className="pb-2 mt-4">
                             <div className="form-input">
                                 <label>Logga in som</label>
                                 <select
-                                    name="login_as"
+                                    name="role" // Change name to "role"
+                                    value={this.state.role} // Bind value to state
+                                    onChange={this.handleInputChange} // Handle change
                                 >
                                     <option value="" disabled>-- Logga in som --</option>
-                                    <option value="kund">Kund</option>
-                                    <option value="admin">Admin</option>
-                                    <option value="stadare">Städare</option>
+                                    <option value="KUND">Kund</option>
+                                    <option value="ADMIN">Admin</option>
+                                    <option value="STÄDARE">Städare</option>
                                 </select>
                             </div>
                         </div>
@@ -122,7 +154,8 @@ class LoginForm extends Component {
                                 name="email"
                                 placeholder="E-post"
                             />
-                            {this.state.errors.email && <span className="text-sm text-danger">{this.state.errors.email}</span>}
+                            {this.state.errors.email &&
+                                <span className="text-sm text-danger">{this.state.errors.email}</span>}
 
                             <label htmlFor="password">Lösenord</label>
                             <input
@@ -134,7 +167,8 @@ class LoginForm extends Component {
                                 name="password"
                                 placeholder="******"
                             />
-                            {this.state.errors.password && <span className="text-sm text-danger">{this.state.errors.password}</span>}
+                            {this.state.errors.password &&
+                                <span className="text-sm text-danger">{this.state.errors.password}</span>}
 
                             <button className="button button-primary mt-8" type="submit">
                                 Logga in
