@@ -9,11 +9,10 @@ const CleaningApproval = ({ cleaning }) => {
 
     return (
         <div className="cleaning-approval">
-            <h2>Godkänn städning</h2>
+            <h2>Godkänn avslutad städning</h2>
             <div className="cleaning-details">
                 <p>Datum: {cleaning.date}</p>
                 <p>Tid: {cleaning.time}</p>
-                <p>Städföretag: {cleaning.cleaningCompany}</p>
             </div>
             <div className="approval-buttons">
                 <button onClick={() => handleApproval(true)}>Godkänn</button>

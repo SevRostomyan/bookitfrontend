@@ -1,14 +1,18 @@
 import React, { useState, useEffect } from 'react';
+import { useAuth } from '../../AuthContext'; // Import useAuth
 import '../../assets/BookedClean.css';
 
 const Bookings = () => {
   const [bookings, setBookings] = useState([]);
+  const { auth } = useAuth(); // Use the useAuth hook to access the auth state
 
   useEffect(() => {
     const fetchBookings = async () => {
       try {
-        // Hämta token från localStorage om det finns
-        const token = localStorage.getItem('jwtToken');
+        // Hämtning av token från localStorage har ersatts med AuthContext
+        /*const token = localStorage.getItem('jwtToken');*/
+
+        const token = auth.token; // Use the token from AuthContext
 
         // Kontrollera om token finns innan du gör fetch-anropet
         if (token) {
@@ -33,8 +37,10 @@ const Bookings = () => {
       }
     };
 
-    fetchBookings();
-  }, []);
+    fetchBookings().catch(error => {
+      console.error('Error in fetchBookings:', error);
+    });
+  }, [auth.token]); // Add auth.token as a dependency
 
   return (
       <div className="bookings">
