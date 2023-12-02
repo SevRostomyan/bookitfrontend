@@ -61,7 +61,7 @@ const BookingForm = () => {
           body: JSON.stringify({
             städningsAlternativ: formData.cleaningType,
             bookingTime: bookingDateTime,
-            adress: 'Din adress',
+            adress: formData.adress,
             messageAtBooking: formData.message,
           }),
         });
