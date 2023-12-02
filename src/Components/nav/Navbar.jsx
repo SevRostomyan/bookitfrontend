@@ -1,18 +1,60 @@
-import { Link } from "react-router-dom";
+import { Link,useNavigate  } from "react-router-dom";
 import { useState } from "react";
+import { useAuth } from "../../AuthContext";
+
+
 
 export default function Navbar() {
 
     let [isOpen, setOpen] = useState(false);
+    const { auth, setAuth } = useAuth();
+    const navigate = useNavigate(); // Hook for navigation
+
+    const handleLogout = async () => {
+
+        try {
+            const response = await fetch('http://localhost:7878/api/auth/logout', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${auth.token}`, // Include the JWT token
+                    // Add other necessary headers
+                },
+            });
+
+            if (response.ok) {
+
+                // Clear the authentication state
+        setAuth({ token: null, userId: null, role: null });
+        // Additional logout actions (e.g., redirect to login page)
+
+                // Show popup window
+                alert("Du är nu utloggad. Tryck Ok för att ta dig till Hemsidan.");
+
+                // Redirect to the homepage
+                navigate('/'); // Adjust the path as needed for your homepage
+
+            } else {
+                console.error('Logout failed:', response.status);
+                // Handle failed logout attempt
+            }
+        } catch (error) {
+            console.error('Error during logout:', error);
+        }
+    };
+
+
 
     return (
         <nav className="nav text-sm md-text-base">
-            {/*Mobile*/}
 
+
+            {/*Mobile*/}
             <div className={`relative z-40 ${isOpen ? 'md-hidden' : 'hidden'}`}>
                 <div className={`fixed inset-0 bg-black/25`}></div>
                 <div className="fixed inset-0 z-40 flex">
                     <div className="relative flex w-full max-w-xs flex-col overflow-y-auto bg-white pb-12 shadow-xl">
+
+
                         {/*Close Btn*/}
                         <div className="flex px-4 pb-2 pt-5">
                             <button type="button" onClick={() => setOpen(!isOpen)} className="button button-link ml-auto w-auto inline-flex items-center">
@@ -40,6 +82,9 @@ export default function Navbar() {
                             <ul className="flex flex-col gap-2 pt-4">
                                 <li><Link to="/login" className="button button-white">Logga in</Link></li>
                                 <li><Link to="/register" className="button button-secondary">Registrera</Link></li>
+                                {auth.token && (
+                                    <li><button onClick={handleLogout} className="button button-link">Logga ut</button></li>
+                                )}
                             </ul>
                         </div>
                     </div>
@@ -62,6 +107,8 @@ export default function Navbar() {
                 </ul>
             </div>
 
+
+
             {/*Desktop*/}
             <div className="container-xl hidden md-flex mx-auto px-8 justify-between items-center">
                 <Link to="/" className="button button-primary">
@@ -76,6 +123,9 @@ export default function Navbar() {
                 <ul className="flex gap-4">
                     <li><Link to="/login" className="button button-white">Logga in</Link></li>
                     <li><Link to="/register" className="button button-secondary">Registrera</Link></li>
+                    {auth.token && (
+                        <li><button onClick={handleLogout} className="button button-white">Logga ut</button></li>
+                    )}
                 </ul>
             </div>
         </nav>

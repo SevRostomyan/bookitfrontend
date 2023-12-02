@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
 import './../../assets/auth.css';
-import {withNavigation} from '../withNavigation'; //
+import {withNavigation} from '../withNavigation';
+import {useAuth} from "../../AuthContext"; //
 
 class LoginForm extends Component {
     constructor(props) {
@@ -9,6 +10,7 @@ class LoginForm extends Component {
         this.state = {
             email: '',
             password: '',
+            role:'',
             errors: {
                 email: '',
                 password: '',
@@ -76,8 +78,12 @@ class LoginForm extends Component {
                 if (data.errorMessage) {
                     this.setState({unauthorizedAccessMessage: data.errorMessage});
                 } else if (data.token) {
-                    localStorage.setItem('jwtToken', data.token);
-                    console.log(this.state.role)
+
+                    /*localStorage.setItem('jwtToken', data.token);*/ /*Ersätter local storage med authContext*/
+                    const { setAuth } = this.props.authContext;
+                    setAuth({ token: data.token, userId: data.userId, role: data.role}); /* extract user ID from response if available */
+                    console.log(this.state.role);
+
                     // Redirect based on role
                     switch (data.role) {
                         case 'ADMIN':
@@ -186,4 +192,16 @@ class LoginForm extends Component {
     }
 }
 
-export default withNavigation(LoginForm);
+
+/*export default withNavigation(LoginForm);*/
+/*Har ersatt ovan med nedan som kombinerar både withNavigation higher order
+component and authContext som används för att spara id etc istället för localStorage*/
+
+
+// This functional component wraps LoginForm and injects the auth context
+const LoginFormWithAuth = (props) => {
+    return <LoginForm {...props} authContext={useAuth()} />;
+};
+
+// Wrap LoginFormWithAuth with the withNavigation HOC
+export default withNavigation(LoginFormWithAuth);

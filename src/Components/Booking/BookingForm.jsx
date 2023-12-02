@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import '../../assets/Booking.css';
-
+import {useAuth} from "../../AuthContext";
 
 
 const BookingForm = () => {
+  const { auth } = useAuth(); // Use the useAuth hook to access the auth state
   const [formData, setFormData] = useState({
     cleaningType: '',
     desiredDate: '',
@@ -47,7 +48,9 @@ const BookingForm = () => {
     if (validateForm()) {
       try {
         const bookingDateTime = `${formData.desiredDate}T${formData.desiredTime}`;
-        const token = localStorage.getItem('jwtToken'); // Retrieve the token from localStorage
+
+        const token =auth.token; // Use the token from the AuthContext
+
 
         const response = await fetch('http://localhost:7878/api/bokning/bookCleaning', {
           method: 'POST',
