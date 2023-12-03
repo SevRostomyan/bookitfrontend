@@ -3,9 +3,11 @@ import './../../assets/CleaningApproval.css';
 
 import {useAuth} from "../../AuthContext";
 import {useNavigate} from "react-router-dom";
+import { useBookings } from '../../BookingsContext';
 
 const CleaningApproval = () => {
-    const [bookings, setBookings] = useState([]);
+    const { bookings, setBookings, fetchBookings } = useBookings();
+
     const [feedbacks, setFeedbacks] = useState({}); // New state to track feedbacks
     const [feedbackSubmitted, setFeedbackSubmitted] = useState({}); // New state to track submitted feedbacks
     const [feedbackVisible, setFeedbackVisible] = useState({}); // Track visibility of feedback text fields
@@ -14,8 +16,8 @@ const CleaningApproval = () => {
     const {auth} = useAuth();
     const navigate = useNavigate();
 
-    // Define fetchCompletedBookings function with useCallback
-    const fetchCompletedBookings = useCallback(async () => {
+    // Define fetchReportedCompletedBookings function with useCallback
+    const fetchReportedCompletedBookings = useCallback(async () => {
         try {
             const response = await fetch('http://localhost:7878/api/bokning/fetchReportedCompletedBookingsByUserId', {
                 method: 'POST',
@@ -29,7 +31,7 @@ const CleaningApproval = () => {
                 // Check if the response body is not empty
                 if (response.status !== 204) { // 204 No Content
                     const data = await response.json();
-                    setBookings(data);
+                    setBookings([...data]); // Spread into a new array
 
                     // Initialize visibility states for each booking
                     const initialFeedbackVisible = {};
@@ -54,10 +56,10 @@ const CleaningApproval = () => {
 
 
     useEffect(() => {
-        fetchCompletedBookings().catch(error => {
-            console.error('Error in fetchCompletedBookings:', error);
+        fetchReportedCompletedBookings().catch(error => {
+            console.error('Error in fetchReportedCompletedBookings:', error);
         });
-    }, [auth.token, fetchCompletedBookings]); // Add fetchCompletedBookings as a dependency for useEffect
+    }, [auth.token, fetchReportedCompletedBookings]); // Add fetchReportedCompletedBookings as a dependency for useEffect
 
 
     const updateCleaningStatus = async (cleaningId, status) => {
@@ -77,20 +79,30 @@ const CleaningApproval = () => {
 
             if (response.ok) {
 
-
                 // Update local state immediately
                 setBookings(bookings.map(booking =>
                     booking.id === cleaningId ? {...booking, approved: status} : booking
                 ));
                 setButtonsVisible({...buttonsVisible, [cleaningId]: false}); // Hide approval/disapproval buttons
 
-                // Introduce a short delay before re-fetching
+
+                // Use a callback with setState to ensure fetchReportedCompletedBookings is called after state update
+                setBookings(currentBookings => {
+                    const updatedBookings = currentBookings.map(booking =>
+                        booking.id === cleaningId ? {...booking, approved: status} : booking
+                    );
+                    fetchReportedCompletedBookings(); // Call fetchReportedCompletedBookings after updating the state
+                    return updatedBookings;
+                });
+
+               /* // Introduce a short delay before re-fetching
                 setTimeout(async () => {
-                    await fetchCompletedBookings();
-                }, 1000); // Delay of 1 second
+                    await fetchReportedCompletedBookings();
+                }, 1000); // Delay of 1 second*/
 
 
                 setShowPopup(true); // Show the popup on successful update
+                await fetchBookings(); // Refresh the bookings list
             } else {
                 console.error('Failed to update cleaning status:', response.status);
             }

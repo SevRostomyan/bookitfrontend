@@ -1,6 +1,7 @@
 import './App.css';
 import Navbar from "./Components/nav/Navbar";
 import { Route, Routes } from "react-router-dom";
+import { BookingsProvider } from './BookingsContext';
 import Home from "./Components/pages/Home";
 import Register from "./Components/pages/Register";
 import Booking from "./Components/pages/Booking";
@@ -24,7 +25,11 @@ function App() {
                     <Route path="/register" element={<Register />} />
                     <Route path="/admin-dashboard" element={<AdminDashboard />} />
                     <Route path="/employee-dashboard" element={<EmployeeDashboard />} />
-                    <Route path="/customer-dashboard" element={<CustomerDashboard />} />
+                    <Route path="/customer-dashboard" element={
+                        <BookingsProvider>
+                            <CustomerDashboard />
+                        </BookingsProvider>
+                    } />
                 </Routes>
             </main>
         </div>
