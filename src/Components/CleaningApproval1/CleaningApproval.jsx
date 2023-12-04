@@ -12,7 +12,7 @@ const CleaningApproval = () => {
     const [feedbackSubmitted, setFeedbackSubmitted] = useState({}); // New state to track submitted feedbacks
     const [feedbackVisible, setFeedbackVisible] = useState({}); // Track visibility of feedback text fields
     const [buttonsVisible, setButtonsVisible] = useState({}); // Track visibility of approval/disapproval buttons
-    const [showPopup, setShowPopup] = useState(false);
+    const [showPopup, setShowPopup] = useState({});
     const {auth} = useAuth();
     const navigate = useNavigate();
 
@@ -109,8 +109,8 @@ const CleaningApproval = () => {
                     await fetchReportedCompletedBookings();
                 }, 1000); // Delay of 1 second*/
 
-
-                setShowPopup(true); // Show the popup on successful update
+                // Set the popup visibility for the specific booking ID on successful update
+                setShowPopup(currentPopups => ({ ...currentPopups, [cleaningId]: true }));
                 await fetchBookings(); // Refresh the bookings list
             } else {
                 console.error('Failed to update cleaning status:', response.status);
@@ -148,8 +148,8 @@ const CleaningApproval = () => {
         setFeedbacks({...feedbacks, [cleaningId]: feedback});
     };
 
-    const handlePopupClose = () => {
-        setShowPopup(false);
+    const handlePopupClose = (bookingId) => {
+        setShowPopup(currentPopups => ({ ...currentPopups, [bookingId]: false }));
     };
 
     const goToDashboard = () => {
@@ -157,7 +157,7 @@ const CleaningApproval = () => {
     };
 
     // Popup component
-    const Popup = () => (
+    const Popup = ({ bookingId }) => (
         <div className="popup-overlay">
             <div className="popup-content">
                 <p>Tack för din feedback!</p>
@@ -179,6 +179,7 @@ const CleaningApproval = () => {
                             <div className="cleaning-details">
                                 <p>Datum: {booking.bookingTime}</p>
                                 <p>Adress: {booking.adress}</p>
+                                {showPopup[booking.id] && <Popup bookingId={booking.id} />}
                             </div>
                             {feedbackVisible[booking.id] && (
                                 <div className="feedback-section">
@@ -208,7 +209,7 @@ const CleaningApproval = () => {
                                     </button>
                                 </div>
                             )}
-                            {showPopup && <Popup/>}
+
 
                             {booking.approved &&
                                 <p>Städningen är {booking.approved === 'COMPLETED' ? 'godkänd' : 'underkänd'}.</p>}
