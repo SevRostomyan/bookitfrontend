@@ -10,8 +10,7 @@ class Booking extends Component {
     render() {
         const cleaningData = {
             date: '2023-11-01',
-            time: '10:00 AM',
-            cleaningCompany: 'Exempel Städföretag',
+            time: '10:00 AM'
         };
 
         return (

@@ -19,16 +19,13 @@ function App() {
             <main>
                 <Routes>
                     <Route path="/" element={<Home />} />
-                    <Route path="/booking" element={<Booking />} />
+                    <Route path="/booking" element={<BookingsProvider><Booking /></BookingsProvider>} />
                     <Route path="/history" element={<BookingHistoryComponent />} />
                     <Route path="/login" element={<Login />} />
                     <Route path="/register" element={<Register />} />
                     <Route path="/admin-dashboard" element={<AdminDashboard />} />
                     <Route path="/employee-dashboard" element={<EmployeeDashboard />} />
-                    <Route path="/customer-dashboard" element={
-                        <BookingsProvider>
-                            <CustomerDashboard />
-                        </BookingsProvider>
+                    <Route path="/customer-dashboard" element={<CustomerDashboard />
                     } />
                 </Routes>
             </main>

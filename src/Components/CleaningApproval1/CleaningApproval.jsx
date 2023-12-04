@@ -55,6 +55,15 @@ const CleaningApproval = () => {
     }, [auth.token]); // Dependencies for useCallback
 
 
+    //a function to refresh the data
+    const refreshData = async () => {
+        await fetchReportedCompletedBookings();
+        // Call fetchBookings from the context to refresh the BookedClean component
+        // Assuming fetchBookings is accessible from the context
+        await fetchBookings();
+    };
+
+
     useEffect(() => {
         fetchReportedCompletedBookings().catch(error => {
             console.error('Error in fetchReportedCompletedBookings:', error);
@@ -207,7 +216,11 @@ const CleaningApproval = () => {
                     ))}
                 </ul>
             )}
+            <div>
+                <button onClick={refreshData}>Uppdatera Information</button>
+            </div>
         </div>
+
     );
 };
 
