@@ -1,6 +1,7 @@
 import React, {useEffect } from 'react';
 import { useBookings } from '../../BookingsContext';
 import '../../assets/BookedClean.css';
+import DataRefreshButton from '../BookedCleanings/DataRefreshButton';
 
 const Bookings = () => {
   const { bookings, fetchBookings } = useBookings();
@@ -13,6 +14,9 @@ const Bookings = () => {
 
   return (
       <div className="bookings">
+          <div>
+              <DataRefreshButton />
+          </div>
         <h1>Mina bokade städningar</h1>
         {bookings.length === 0 ? (
             <p>Du har inga bokade städningar.</p>

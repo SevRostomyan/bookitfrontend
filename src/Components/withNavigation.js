@@ -1,4 +1,4 @@
-// withNavigation.js
+// withNavigation.js HOC
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 

@@ -1,22 +1,32 @@
-import React, {useState, useEffect, useCallback} from 'react';
+import React, {useState, useEffect} from 'react';
 import './../../assets/CleaningApproval.css';
 
 import {useAuth} from "../../AuthContext";
 import {useNavigate} from "react-router-dom";
 import { useBookings } from '../../BookingsContext';
+import DataRefreshButton from '../BookedCleanings/DataRefreshButton';
 
 const CleaningApproval = () => {
     const { bookings, setBookings, fetchBookings } = useBookings();
 
     const [feedbacks, setFeedbacks] = useState({}); // New state to track feedbacks
     const [feedbackSubmitted, setFeedbackSubmitted] = useState({}); // New state to track submitted feedbacks
-    const [feedbackVisible, setFeedbackVisible] = useState({}); // Track visibility of feedback text fields
-    const [buttonsVisible, setButtonsVisible] = useState({}); // Track visibility of approval/disapproval buttons
+
     const [showPopup, setShowPopup] = useState({});
     const {auth} = useAuth();
     const navigate = useNavigate();
 
-    // Define fetchReportedCompletedBookings function with useCallback
+
+    //Datan kommer från BookingsContext men states hanteras lokalt enligt nedan.
+    const { reportedCompletedBookings, fetchReportedCompletedBookings } = useBookings();
+    const [completedBookings, setCompletedBookings] = useState([]);
+    const [feedbackVisible, setFeedbackVisible] = useState({}); // Track visibility of feedback text fields
+    const [buttonsVisible, setButtonsVisible] = useState({});   // Track visibility of approval/disapproval buttons
+
+
+
+
+   /* // Define fetchReportedCompletedBookings function with useCallback
     const fetchReportedCompletedBookings = useCallback(async () => {
         try {
             const response = await fetch('http://localhost:7878/api/bokning/fetchReportedCompletedBookingsByUserId', {
@@ -31,7 +41,7 @@ const CleaningApproval = () => {
                 // Check if the response body is not empty
                 if (response.status !== 204) { // 204 No Content
                     const data = await response.json();
-                    setBookings([...data]); // Spread into a new array
+                    setCompletedBookings([...data]); // Spread into a new array
 
                     // Initialize visibility states for each booking
                     const initialFeedbackVisible = {};
@@ -52,23 +62,36 @@ const CleaningApproval = () => {
         } catch (error) {
             console.error('Error during fetch:', error);
         }
-    }, [auth.token]); // Dependencies for useCallback
+    }, [auth.token]); // Dependencies for useCallback*/
 
 
-    //a function to refresh the data
-    const refreshData = async () => {
-        await fetchReportedCompletedBookings();
-        // Call fetchBookings from the context to refresh the BookedClean component
-        // Assuming fetchBookings is accessible from the context
-        await fetchBookings();
-    };
 
+    /*useEffect(() => {
+        fetchReportedCompletedBookings().catch(error => {
+            console.error('Error in fetchReportedCompletedBookings:', error);
+        });
+    }, [auth.token, fetchReportedCompletedBookings]); // Add fetchReportedCompletedBookings as a dependency for useEffect
+*/
 
     useEffect(() => {
         fetchReportedCompletedBookings().catch(error => {
             console.error('Error in fetchReportedCompletedBookings:', error);
         });
-    }, [auth.token, fetchReportedCompletedBookings]); // Add fetchReportedCompletedBookings as a dependency for useEffect
+    }, [fetchReportedCompletedBookings]); // Only fetchReportedCompletedBookings as a dependency
+
+    useEffect(() => {
+        setCompletedBookings(reportedCompletedBookings);
+
+        const initialFeedbackVisible = {};
+        const initialButtonsVisible = {};
+        reportedCompletedBookings.forEach(booking => {
+            initialFeedbackVisible[booking.id] = true;
+            initialButtonsVisible[booking.id] = true;
+        });
+        setFeedbackVisible(initialFeedbackVisible);
+        setButtonsVisible(initialButtonsVisible);
+    }, [reportedCompletedBookings]);
+
 
 
     const updateCleaningStatus = async (cleaningId, status) => {
@@ -104,14 +127,11 @@ const CleaningApproval = () => {
                     return updatedBookings;
                 });
 
-               /* // Introduce a short delay before re-fetching
-                setTimeout(async () => {
-                    await fetchReportedCompletedBookings();
-                }, 1000); // Delay of 1 second*/
+
 
                 // Set the popup visibility for the specific booking ID on successful update
                 setShowPopup(currentPopups => ({ ...currentPopups, [cleaningId]: true }));
-                await fetchBookings(); // Refresh the bookings list
+                await fetchBookings(); // Refresh the bookings list in BookedClean
             } else {
                 console.error('Failed to update cleaning status:', response.status);
             }
@@ -153,7 +173,7 @@ const CleaningApproval = () => {
     };
 
     const goToDashboard = () => {
-        navigate('/customer-dashboard'); // Adjust the path as needed for your dashboard
+        navigate('/customer-dashboard');
     };
 
     // Popup component
@@ -162,19 +182,24 @@ const CleaningApproval = () => {
             <div className="popup-content">
                 <p>Tack för din feedback!</p>
                 <button onClick={goToDashboard}>Till min dashboard</button>
-                <button onClick={handlePopupClose}>Stanna kvar</button>
+                <button onClick={() => handlePopupClose(bookingId)}>Stanna kvar</button>
+                {/*<button onClick={handlePopupClose}>Stanna kvar</button>*/}
             </div>
         </div>
     );
 
     return (
         <div className="cleaning-approval">
+            <div>
+                {/*Refresh Only Reported Completed Bookings:*/}
+                <DataRefreshButton onRefresh={fetchReportedCompletedBookings} />
+            </div>
             <h2> Recensera Avslutade Städningar</h2>
-            {bookings.length === 0 ? (
+            {completedBookings.length === 0 ? (
                 <p>Inga rapporterade städningar att recensera.</p>
             ) : (
                 <ul>
-                    {bookings.map(booking => (
+                    {completedBookings.map(booking => (
                         <li key={booking.id}>
                             <div className="cleaning-details">
                                 <p>Datum: {booking.bookingTime}</p>
@@ -217,9 +242,7 @@ const CleaningApproval = () => {
                     ))}
                 </ul>
             )}
-            <div>
-                <button onClick={refreshData}>Uppdatera Information</button>
-            </div>
+
         </div>
 
     );

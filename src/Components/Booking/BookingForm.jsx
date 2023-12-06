@@ -1,10 +1,16 @@
 import React, { useState } from 'react';
 import '../../assets/Booking.css';
 import {useAuth} from "../../AuthContext";
+import {useNavigate} from "react-router-dom";
+
 
 
 const BookingForm = () => {
+  const [showPopup, setShowPopup] = useState(false);
   const { auth } = useAuth(); // Use the useAuth hook to access the auth state
+  const navigate = useNavigate();
+
+
   const [formData, setFormData] = useState({
     cleaningType: '',
     desiredDate: '',
@@ -15,6 +21,7 @@ const BookingForm = () => {
   const [errors, setErrors] = useState({
     cleaningType: '',
     desiredDate: '',
+    desiredTime: '',
     message: '',
   });
 
@@ -27,15 +34,22 @@ const BookingForm = () => {
   };
 
   const validateForm = () => {
-    const { desiredDate } = formData;
+    const { desiredDate,desiredTime  } = formData;
     const newErrors = {
+      cleaningType: '',
       desiredDate: '',
+      desiredTime: '',
       message: '',
     };
     let isValid = true;
 
     if (!desiredDate) {
       newErrors.desiredDate = 'Välj önskat datum';
+      isValid = false;
+    }
+
+    if (!desiredTime) {
+      newErrors.desiredTime = 'Välj önskad tid';
       isValid = false;
     }
 
@@ -78,6 +92,7 @@ const BookingForm = () => {
             console.log('POST response:', textResult);
             // Handle the text response here
           }
+          setShowPopup(true);
         }
           else {
           console.error('Server responded with non-OK status:', response.status);
@@ -88,8 +103,25 @@ const BookingForm = () => {
     }
   };
 
+  const goToDashboard = () => {
+    navigate('/customer-dashboard');
+  };
+
+  const Popup = () => (
+      <div className="popup">
+        <div className="popup-content">
+          <p>Bokningen lyckades. En administratör kommer inom kort att tilldela en städare. Känn dig fri att kontakta oss vid frågor.</p>
+          <button onClick={goToDashboard}>Till min dashboard</button>
+          <button onClick={() => setShowPopup(false)}>Stanna här</button>
+        </div>
+      </div>
+  );
+
+
+
   return (
       <div className="booking-container">
+        {showPopup && <Popup />}
         <div className="booking-form">
           <h2>Boka en städning</h2>
           <form onSubmit={handleSubmit}>
@@ -115,6 +147,7 @@ const BookingForm = () => {
                   onChange={handleInputChange}
                   name="desiredDate"
               />
+              {errors.desiredDate && <span className="error-message">{errors.desiredDate}</span>}
             </div>
             <div className="form-group">
               <label>Tid för städning</label>
