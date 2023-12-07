@@ -91,9 +91,13 @@ export default function Navbar() {
                                 {auth.token && (
                                     <li>
                                         <Link to={getDashboardRoute()} className="button button-primary">Till Mina Sidor</Link>
+                                    </li>
+                                )}
+
+                                {auth.token && auth.role === 'KUND' && (
+                                    <li>
                                         <li><Link to="/booking" className="button button-link">Bokning</Link></li>
                                         <li><Link to="/history" className="button button-link">Historik</Link></li>
-
                                     </li>
                                 )}
                             </ul>
@@ -159,12 +163,11 @@ export default function Navbar() {
                         </li>
                     )}
 
-
-                    {auth.token && (
-                        <>
-                    <li><Link to="/booking" className="button button-primary">Bokning</Link></li>
-                    <li><Link to="/history" className="button button-primary">Historik</Link></li>
-                        </>
+                    {auth.token && auth.role === 'KUND' && (
+                        <li>
+                            <li><Link to="/booking" className="button button-link">Bokning</Link></li>
+                            <li><Link to="/history" className="button button-link">Historik</Link></li>
+                        </li>
                     )}
 
                 </ul>
