@@ -11,6 +11,7 @@ import AdminDashboard from "./Components/Dashboard/AdminDashboard";
 import EmployeeDashboard from "./Components/Dashboard/EmployeeDashboard";
 import CustomerDashboard from "./Components/Dashboard/CustomerDashboard";
 import PerformedCleaningComponent from "./Components/Booking/PerformedCleaningComponent";
+import BookingAdminPanel from "./Components/Admin/BookingAdminPanel";
 
 
 function App() {
@@ -26,6 +27,7 @@ function App() {
                     <Route path="/login" element={<Login />} />
                     <Route path="/register" element={<Register />} />
                     <Route path="/admin-dashboard" element={<AdminDashboard />} />
+                    <Route path="/booking-admin-panel" element={<BookingAdminPanel />} />
                     <Route path="/employee-dashboard" element={<EmployeeDashboard />} />
                     <Route path="/customer-dashboard" element={<CustomerDashboard />
                     } />
