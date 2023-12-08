@@ -10,6 +10,7 @@ import BookingHistoryComponent from "./Components/Booking/BookingHistoryComponen
 import AdminDashboard from "./Components/Dashboard/AdminDashboard";
 import EmployeeDashboard from "./Components/Dashboard/EmployeeDashboard";
 import CustomerDashboard from "./Components/Dashboard/CustomerDashboard";
+import PerformedCleaningComponent from "./Components/Booking/PerformedCleaningComponent";
 
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
                     <Route path="/" element={<Home />} />
                     <Route path="/booking" element={<BookingsProvider><Booking /></BookingsProvider>} />
                     <Route path="/history" element={<BookingHistoryComponent />} />
+                    <Route path="/performed-cleaning" element={<PerformedCleaningComponent />} />
                     <Route path="/login" element={<Login />} />
                     <Route path="/register" element={<Register />} />
                     <Route path="/admin-dashboard" element={<AdminDashboard />} />
