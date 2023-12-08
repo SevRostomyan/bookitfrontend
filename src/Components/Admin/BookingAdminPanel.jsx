@@ -1,11 +1,58 @@
 import React, {Component} from 'react';
 
 class BookingAdminPanel extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            search: '',
+            dateFilter: '',
+            userFilter: '',
+            customerFilter: '',
+            typeFilter: '',
+            errors: {
+                search: '',
+                dateFilter: '',
+                userFilter: '',
+                customerFilter: '',
+                typeFilter: '',
+            },
+        };
+    }
+
+    resetFilters = () => {
+        this.setState({
+            search: '',
+            dateFilter: '',
+            userFilter: '',
+            customerFilter: '',
+            typeFilter: '',
+        });
+    };
+
+    handleInputChange = (e) => {
+        const {name, value} = e.target;
+        this.setState({[name]: value});
+    };
+
     items = fakeItems();
 
     cleaningTypes = ["Basic Städning", "Topp Städning", "Diamant Städning", "Fönstertvätt"];
 
     render() {
+        const uniqueUsers = [...new Set(this.items.map(item => item.user))];
+        const uniqueCustomers = [...new Set(this.items.map(item => item.customer))];
+        const uniqueDates = [...new Set(this.items.map(item => item.date))];
+
+        const filteredItems = this.items.filter(item => {
+            const searchFilter = item.message.toLowerCase().includes(this.state.search.toLowerCase());
+            const dateFilter = !this.state.dateFilter || item.date === this.state.dateFilter;
+            const userFilter = !this.state.userFilter || item.user === this.state.userFilter;
+            const customerFilter = !this.state.customerFilter || item.customer === this.state.customerFilter;
+            const typeFilter = !this.state.typeFilter || item.type === this.state.typeFilter;
+
+            return searchFilter && dateFilter && userFilter && customerFilter && typeFilter;
+        });
+
         return (
             <div>
                 <h1 className="text-xl">Administrera bokningar</h1>
@@ -14,19 +61,101 @@ class BookingAdminPanel extends Component {
                 <h2 className="text-lg text-primary"> e.x: John Doe</h2>
 
                 <section className="md-flex items-center w-full max-w-7xl px-8 py-12 mx-auto box-border">
-                    <div className="auth-form w-full max-w-md mx-auto px-8">
+                    <div className="w-full max-w-md mx-auto px-8">
                         <div className="card ">
-                            <form className="search-form">
+                            <form>
                                 <label htmlFor="seatch">Sök</label>
                                 <input
-                                    value=""
-                                    className="form-input"
+                                    value={this.state.search}
+                                    className="form-input w-full box-border"
                                     id="seatch"
                                     type="text"
                                     name="seatch"
                                     placeholder="Sök"
                                 />
                             </form>
+                        </div>
+
+                        <div className="card mt-4">
+                            <h2 className="text-lg text-gray-600 mt-0">Filtrera</h2>
+
+                            <div className="pb-2 mt-4">
+                                <div className="form-input">
+                                    <label>Datum</label>
+                                    <select
+                                        name="dateFilter"
+                                        value={this.state.dateFilter}
+                                        onChange={this.handleInputChange}
+                                    >
+                                        <option value="" disabled>-- Datum --</option>
+                                        {uniqueDates.map((date, index) => (
+                                            <option key={index} value={date}>
+                                                {date}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div className="pb-2 mt-4">
+                                <div className="form-input">
+                                    <label>Städare</label>
+                                    <select
+                                        name="userFilter"
+                                        value={this.state.userFilter}
+                                        onChange={this.handleInputChange}
+                                    >
+                                        <option value="" disabled>-- Städare --</option>
+                                        {uniqueUsers.map((user, index) => (
+                                            <option key={index} value={user}>
+                                                {user}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div className="pb-2 mt-4">
+                                <div className="form-input">
+                                    <label>Kund</label>
+                                    <select
+                                        name="customerFilter"
+                                        value={this.state.customerFilter}
+                                        onChange={this.handleInputChange}
+                                    >
+                                        <option value="" disabled>-- Kund --</option>
+                                        {uniqueCustomers.map((customer, index) => (
+                                            <option key={index} value={customer}>
+                                                {customer}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div className="pb-2 mt-4">
+                                <div className="form-input">
+                                    <label>TYP</label>
+                                    <select
+                                        name="typeFilter"
+                                        value={this.state.typeFilter}
+                                        onChange={this.handleInputChange}
+                                    >
+                                        <option value="" disabled>-- TYP --</option>
+                                        {this.cleaningTypes.map((item, index) => (
+                                            <option key={index} value={item}>
+                                                {item}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div className="mt-4">
+                                <button className="button button-secondary" onClick={this.resetFilters}>
+                                    Återställ filter
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </section>
@@ -47,7 +176,7 @@ class BookingAdminPanel extends Component {
                             </tr>
                             </thead>
                             <tbody>
-                            {this.items.map((item, index) => (
+                            {filteredItems.map((item, index) => (
                                 <tr key={index} data-index={index}>
                                     <td>{item.id}</td>
                                     <td className="text-left">{item.type}</td>
