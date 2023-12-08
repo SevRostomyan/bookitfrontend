@@ -6,14 +6,30 @@ class BookingAdminPanel extends Component {
     cleaningTypes = ["Basic Städning", "Topp Städning", "Diamant Städning", "Fönstertvätt"];
 
     render() {
-        let totalPrice = 0;
-
         return (
             <div>
                 <h1 className="text-xl">Administrera bokningar</h1>
 
                 {/* Admin name */}
                 <h2 className="text-lg text-primary"> e.x: John Doe</h2>
+
+                <section className="md-flex items-center w-full max-w-7xl px-8 py-12 mx-auto box-border">
+                    <div className="auth-form w-full max-w-md mx-auto px-8">
+                        <div className="card ">
+                            <form className="search-form">
+                                <label htmlFor="seatch">Sök</label>
+                                <input
+                                    value=""
+                                    className="form-input"
+                                    id="seatch"
+                                    type="text"
+                                    name="seatch"
+                                    placeholder="Sök"
+                                />
+                            </form>
+                        </div>
+                    </div>
+                </section>
 
                 <div className="container-xl mx-auto px-8">
                     <div className="card w-full">
