@@ -176,7 +176,10 @@ const BookingForm = () => {
                   placeholder="Lägg till meddelande..."
               />
             </div>
-            <button type="submit">Boka</button>
+            {/* <button type="submit">Boka</button> */}
+
+
+            
           </form>
         </div>
       </div>
