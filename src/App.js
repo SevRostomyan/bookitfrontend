@@ -1,3 +1,4 @@
+import React from 'react';
 import './App.css';
 import Navbar from "./Components/nav/Navbar";
 import { Route, Routes } from "react-router-dom";
@@ -13,7 +14,6 @@ import CustomerDashboard from "./Components/Dashboard/CustomerDashboard";
 import PerformedCleaningComponent from "./Components/Booking/PerformedCleaningComponent";
 import BookingAdminPanel from "./Components/Admin/BookingAdminPanel";
 
-
 function App() {
     return (
         <div className="App">
@@ -26,16 +26,14 @@ function App() {
                     <Route path="/performed-cleaning" element={<PerformedCleaningComponent />} />
                     <Route path="/login" element={<Login />} />
                     <Route path="/register" element={<Register />} />
-                    <Route path="/admin-dashboard" element={<AdminDashboard />} />
+                    <Route path="/admin-dashboard/*" element={<AdminDashboard />} />
                     <Route path="/booking-admin-panel" element={<BookingAdminPanel />} />
                     <Route path="/employee-dashboard" element={<EmployeeDashboard />} />
-                    <Route path="/customer-dashboard" element={<CustomerDashboard />
-                    } />
+                    <Route path="/customer-dashboard" element={<CustomerDashboard />} />
                 </Routes>
             </main>
         </div>
     );
-
 }
 
 export default App;

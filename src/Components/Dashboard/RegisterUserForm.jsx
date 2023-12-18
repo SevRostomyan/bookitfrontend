@@ -36,6 +36,8 @@ function RegisterUserForm({ onUserAdded }) {
             <button type="submit">Registrera Användare</button>
         </form>
     );
+
+
 }
 
 export default RegisterUserForm;
