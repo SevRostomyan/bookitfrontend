@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import {useAuth} from "../../AuthContext";
 
 function BookingManagement() {
     const [bookings, setBookings] = useState([]);
     const [selectedBooking, setSelectedBooking] = useState(null);
     const [availableCleaners, setAvailableCleaners] = useState([]);
+    const { auth } = useAuth(); // Use the useAuth hook to access the auth state
 
     useEffect(() => {
         fetchNotAssignedBookings();
@@ -11,10 +13,12 @@ function BookingManagement() {
 
     const fetchNotAssignedBookings = async () => {
         try {
+            const token =auth.token; // Use the token from the AuthContext
+
             const response = await fetch('http://localhost:7878/api/admin/fetchNotAssignedBookings', {
                 method: 'GET',
                 headers: {
-                    'Authorization': `Bearer YOUR_TOKEN`
+                    'Authorization': `Bearer ${token}`
                 }
             });
             if (!response.ok) {
@@ -29,11 +33,14 @@ function BookingManagement() {
 
     const fetchAvailableCleaners = async (bookingTime) => {
         try {
+
+            const token =auth.token; // Use the token from the AuthContext
+
             const response = await fetch('http://localhost:7878/api/admin/available-cleaners', {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer YOUR_TOKEN`
+                    'Authorization': `Bearer ${token}`
                 },
                 body: JSON.stringify({ bookingTime })
             });
@@ -49,11 +56,12 @@ function BookingManagement() {
 
     const assignCleaning = async (bookingId, cleanerId) => {
         try {
+            const token =auth.token; // Use the token from the AuthContext
             const response = await fetch('http://localhost:7878/api/admin/assignCleaning', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer YOUR_TOKEN`
+                    'Authorization': `Bearer ${token}` // Include the token in the Authorization header
                 },
                 body: JSON.stringify({ bookingId, cleanerId })
             });
