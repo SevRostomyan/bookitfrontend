@@ -1,27 +1,29 @@
 import React, { useState, useEffect } from 'react';
 
 function UserManagement() {
-    const [cleaners, setCleaners] = useState([]);
-    const [customers, setCustomers] = useState([]);
+    const [searchTerm, setSearchTerm] = useState('');
+    const [users, setUsers] = useState([]);
 
     useEffect(() => {
-        fetchUsers('städare', setCleaners);
-        fetchUsers('kunder', setCustomers);
-    }, []);
+        if (searchTerm) {
+            searchUsers(searchTerm);
+        }
+    }, [searchTerm]);
 
-    const fetchUsers = async (userType, setUserList) => {
+    const searchUsers = async (query) => {
         try {
-            const response = await fetch(`http://localhost:7878/api/admin/${userType}/all`, {
+            const userType = query.includes('@') ? 'städare' : 'kunder'; // Antag att e-postadress indikerar en städare
+            const response = await fetch(`http://localhost:7878/api/admin/search/${userType}?query=${query}`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer YOUR_TOKEN`
                 }
             });
             if (!response.ok) {
-                throw new Error(`Failed to fetch ${userType}`);
+                throw new Error(`Failed to fetch users`);
             }
             const data = await response.json();
-            setUserList(data);
+            setUsers(data);
         } catch (error) {
             console.error('Error:', error);
         }
@@ -30,18 +32,16 @@ function UserManagement() {
     return (
         <div>
             <h2>Användarhantering</h2>
+            <input
+                type="text"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                placeholder="Sök användare..."
+            />
+            <button onClick={() => searchUsers(searchTerm)}>Sök</button>
             <div>
-                <h3>Städare</h3>
-                {/* Rendera listan med städare */}
-                {cleaners.map(cleaner => (
-                    <div key={cleaner.id}>{cleaner.name}</div> // Antag att varje städare har ett id och namn
-                ))}
-            </div>
-            <div>
-                <h3>Kunder</h3>
-                {/* Rendera listan med kunder */}
-                {customers.map(customer => (
-                    <div key={customer.id}>{customer.name}</div> // Antag att varje kund har ett id och namn
+                {users.map(user => (
+                    <div key={user.id}>{user.name}</div> // Antag att varje användare har ett id och namn
                 ))}
             </div>
         </div>

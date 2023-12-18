@@ -2,57 +2,38 @@ import React, { useState, useEffect } from 'react';
 
 function BookingManagement() {
     const [bookings, setBookings] = useState([]);
-    const [availableCleaners, setAvailableCleaners] = useState([]);
+    const [selectedBooking, setSelectedBooking] = useState(null);
 
     useEffect(() => {
         fetchNotAssignedBookings();
     }, []);
 
     const fetchNotAssignedBookings = async () => {
-        try {
-            const response = await fetch('http://localhost:7878/api/admin/fetchNotAssignedBookings', {
-                method: 'GET',
-                headers: {
-                    'Authorization': `Bearer YOUR_TOKEN`
-                }
-            });
-            if (!response.ok) {
-                throw new Error('Failed to fetch bookings');
-            }
-            const data = await response.json();
-            setBookings(data);
-        } catch (error) {
-            console.error('Error:', error);
-        }
-    };
-
-    // Antag att du har en funktion för att välja en bokning och hämta tillgängliga städare
-    const selectBooking = async (bookingTime) => {
-        // Här skulle du anropa fetchAvailableCleaners
+        // Kod för att hämta icke-tilldelade bokningar
     };
 
     const assignCleaning = async (bookingId, cleanerId) => {
-        try {
-            const response = await fetch('http://localhost:7878/api/admin/assignCleaning', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer YOUR_TOKEN`
-                },
-                body: JSON.stringify({ bookingId, cleanerId })
-            });
-            if (!response.ok) {
-                throw new Error('Failed to assign cleaning');
-            }
-            // Hantera framgångsrik tilldelning
-        } catch (error) {
-            console.error('Error:', error);
-        }
+        // Kod för att tilldela städning
+    };
+
+    const handleSelectBooking = (booking) => {
+        setSelectedBooking(booking);
+        // Kod för att hämta tillgängliga städare
     };
 
     return (
         <div>
-            {/* Implementering för att visa bokningar och tillgängliga städare */}
+            <h2>Bokningshantering</h2>
+            {bookings.map(booking => (
+                <div key={booking.id} onClick={() => handleSelectBooking(booking)}>
+                    {booking.details} {/* Antag att varje bokning har detaljer */}
+                </div>
+            ))}
+            {selectedBooking && (
+                <div>
+                    {/* Ytterligare UI för att hantera den valda bokningen */}
+                </div>
+            )}
         </div>
     );
 }
