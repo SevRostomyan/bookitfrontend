@@ -189,6 +189,30 @@ main {
   color: #ffffff;
 }
 
+.button-success {
+  color: #ffffff;
+  background-color: #65a30d;
+  border-radius: 0.5rem;
+  -webkit-transition: 0.5s;
+  transition: 0.5s;
+}
+
+.button-success:hover {
+  background-color: #365314;
+}
+
+.button-danger {
+  color: #ffffff;
+  background-color: #be123c;
+  border-radius: 0.5rem;
+  -webkit-transition: 0.5s;
+  transition: 0.5s;
+}
+
+.button-danger:hover {
+  background-color: #730621;
+}
+
 .button-link {
   color: #001C73;
   background-color: transparent;
@@ -200,6 +224,15 @@ main {
 
 .button-link:hover {
   color: #007bff;
+  background-color: transparent;
+}
+
+.button-link-danger {
+  color: #be123c !important;
+}
+
+.button-link-danger:hover {
+  color: #730621 !important;
   background-color: transparent;
 }
 
@@ -223,6 +256,10 @@ main {
 
 .text-primary {
   color: #001C73;
+}
+
+.text-success {
+  color: #65a30d;
 }
 
 .text-danger {
@@ -307,6 +344,10 @@ main {
 
 /* Padding */
 
+.p-0 {
+  padding: 0 !important;
+}
+
 .p-4 {
   padding: 1rem;
 }
@@ -329,6 +370,11 @@ main {
 
 .pb-12 {
   padding-bottom: 3rem;
+}
+
+.px-0 {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
 }
 
 .px-4 {
@@ -364,6 +410,10 @@ main {
 
 .w-auto {
   width: auto;
+}
+
+.w-fit {
+  width: fit-content;
 }
 
 .w-1\/2 {
@@ -441,6 +491,28 @@ main {
   left: 0;
 }
 
+/* Modal */
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+}
+
+
 /* Colors */
 
 .bg-black\/25 {
@@ -461,6 +533,20 @@ main {
   padding: 2rem;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.12);
   border-radius: 1rem;
+}
+
+/* Form */
+
+.form-input {
+  width: auto;
+  border: 2px solid transparent;
+  margin: 0.5rem 0;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  background-color: #e5e7eb;
+  -webkit-transition: 0.5s;
+  transition: 0.5s;
+  outline: none;
 }
 
 /* Responsive */
