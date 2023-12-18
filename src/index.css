@@ -189,6 +189,18 @@ main {
   color: #ffffff;
 }
 
+.button-success {
+  color: #ffffff;
+  background-color: #65a30d;
+  border-radius: 0.5rem;
+  -webkit-transition: 0.5s;
+  transition: 0.5s;
+}
+
+.button-success:hover {
+  background-color: #365314;
+}
+
 .button-danger {
   color: #ffffff;
   background-color: #be123c;
@@ -244,6 +256,10 @@ main {
 
 .text-primary {
   color: #001C73;
+}
+
+.text-success {
+  color: #65a30d;
 }
 
 .text-danger {
@@ -396,6 +412,10 @@ main {
   width: auto;
 }
 
+.w-fit {
+  width: fit-content;
+}
+
 .w-1\/2 {
   width: 50%;
 }
@@ -513,6 +533,20 @@ main {
   padding: 2rem;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.12);
   border-radius: 1rem;
+}
+
+/* Form */
+
+.form-input {
+  width: auto;
+  border: 2px solid transparent;
+  margin: 0.5rem 0;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  background-color: #e5e7eb;
+  -webkit-transition: 0.5s;
+  transition: 0.5s;
+  outline: none;
 }
 
 /* Responsive */

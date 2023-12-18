@@ -9,6 +9,15 @@ class BookingAdminPanel extends Component {
             userFilter: '',
             customerFilter: '',
             typeFilter: '',
+            showAddForm: false,  // To control the visibility of the add form
+            newItem: {
+                type: '',
+                user: '',
+                customer: '',
+                date: '',
+                message: '',
+                price: '',
+            },
             errors: {
                 search: '',
                 dateFilter: '',
@@ -20,6 +29,47 @@ class BookingAdminPanel extends Component {
             showDeleteConfirmation: false,
         };
     }
+
+    toggleAddForm = () => {
+        this.setState((prevState) => ({
+            showAddForm: !prevState.showAddForm,
+        }));
+    };
+
+    handleAddFormChange = (e) => {
+        const { name, value } = e.target;
+        this.setState((prevState) => ({
+            newItem: {
+                ...prevState.newItem,
+                [name]: value,
+            },
+        }));
+    };
+
+    handleAddFormSubmit = (e) => {
+        e.preventDefault();
+
+        // Perform validation if needed
+
+        // Add the new item to the items array
+        this.items.push({
+            id: this.items.length + 1,
+            ...this.state.newItem,
+        });
+
+        // Close the add form and reset form data
+        this.setState({
+            showAddForm: false,
+            newItem: {
+                type: '',
+                user: '',
+                customer: '',
+                date: '',
+                message: '',
+                price: '',
+            },
+        });
+    };
 
     // Function to handle delete button click
     handleDeleteClick = (item) => {
@@ -65,9 +115,12 @@ class BookingAdminPanel extends Component {
         this.setState({[name]: value});
     };
 
-    items = fakeItems();
-
     cleaningTypes = ["Basic Städning", "Topp Städning", "Diamant Städning", "Fönstertvätt"];
+
+    // Fake users
+    users = ["Alex", "Olivia", "Liam", "Sophia", "Mia", "Noah", "Ava", "Ethan"];
+
+    items = fakeItems(this.cleaningTypes, this.users);
 
     render() {
         const uniqueUsers = [...new Set(this.items.map(item => item.user))];
@@ -191,6 +244,139 @@ class BookingAdminPanel extends Component {
                     </div>
                 </section>
 
+                <section className="md-flex items-center w-full px-8 py-12 mx-auto box-border">
+                    <div className="w-full mx-auto px-8">
+                        <div className="card ">
+                            {/* Add Item */}
+                            <div className="w-fit">
+                                <button className="button button-success" onClick={this.toggleAddForm}>
+                                    {/* Toggle icon based on the form visibility */}
+                                    {this.state.showAddForm ? (
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6">
+                                            <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 12h-15" />
+                                        </svg>
+
+                                    ) : (
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6">
+                                            <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                                        </svg>
+                                    )}
+                                </button>
+                            </div>
+
+                            <div className="max-w-xl mx-auto">
+                                {/* Add Item Form Accordion Content */}
+                                {this.state.showAddForm && (
+                                    <div className="mt-4">
+                                        <form onSubmit={this.handleAddFormSubmit}>
+
+                                            <div className="pb-2 mt-4">
+                                                <div className="form-input">
+                                                    <label>TYP</label>
+                                                    <select
+                                                        name="type"
+                                                        value={this.state.newItem.type}
+                                                        onChange={this.handleAddFormChange}
+                                                    >
+                                                        <option value="" disabled>-- TYP --</option>
+                                                        {this.cleaningTypes.map((item, index) => (
+                                                            <option key={index} value={item}>
+                                                                {item}
+                                                            </option>
+                                                        ))}
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div className="pb-2 mt-4">
+                                                <div className="form-input">
+                                                    <label>Städare</label>
+                                                    <select
+                                                        name="user"
+                                                        value={this.state.newItem.user}
+                                                        onChange={this.handleAddFormChange}
+                                                    >
+                                                        <option value="" disabled>-- Städare --</option>
+                                                        {uniqueUsers.map((user, index) => (
+                                                            <option key={index} value={user}>
+                                                                {user}
+                                                            </option>
+                                                        ))}
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div className="pb-2 mt-4">
+                                                <div className="form-input">
+                                                    <label>Kund</label>
+                                                    <select
+                                                        name="customer"
+                                                        value={this.state.newItem.customer}
+                                                        onChange={this.handleAddFormChange}
+                                                    >
+                                                        <option value="" disabled>-- Kund --</option>
+                                                        {uniqueCustomers.map((customer, index) => (
+                                                            <option key={index} value={customer}>
+                                                                {customer}
+                                                            </option>
+                                                        ))}
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div className="pb-2 mt-4">
+                                                <label htmlFor="new-date">Datum</label>
+                                                <input
+                                                    value={this.state.newItem.date}
+                                                    onChange={this.handleAddFormChange}
+                                                    className="form-input w-full box-border"
+                                                    id="new-date"
+                                                    type="date"
+                                                    name="date"
+                                                    placeholder="Datum"
+                                                />
+                                            </div>
+
+                                            <div className="pb-2 mt-4">
+                                                <label htmlFor="new-messsage">Meddelande</label>
+                                                <input
+                                                    value={this.state.newItem.message}
+                                                    onChange={this.handleAddFormChange}
+                                                    className="form-input w-full box-border"
+                                                    id="new-messsage"
+                                                    type="text"
+                                                    name="message"
+                                                    placeholder="Meddelande"
+                                                />
+                                            </div>
+
+                                            <div className="pb-2 mt-4">
+                                                <label htmlFor="new-price">Pris</label>
+                                                <input
+                                                    value={this.state.newItem.price}
+                                                    onChange={this.handleAddFormChange}
+                                                    className="form-input w-full box-border"
+                                                    id="new-price"
+                                                    type="number"
+                                                    name="price"
+                                                    placeholder="Pris"
+                                                />
+                                            </div>
+
+                                            {/* Submit button */}
+                                            <div className="w-fit mt-4">
+                                                <button type="submit" className="button button-success">
+                                                    Lägg till
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
                 <div className="container-xl mx-auto px-8">
                     <div className="card w-full">
                         <table className="table-booking w-full">
@@ -253,11 +439,8 @@ class BookingAdminPanel extends Component {
     }
 }
 
-function fakeItems() {
+function fakeItems(cleaningTypes, users) {
     const items = [];
-
-    // Array of cleaning types
-    const cleaningTypes = ["Basic Städning", "Topp Städning", "Diamant Städning", "Fönstertvätt"];
 
     for (let i = 1; i <= 8; i++) {
         const randomType = cleaningTypes[Math.floor(Math.random() * cleaningTypes.length)];
@@ -270,8 +453,8 @@ function fakeItems() {
         const record = {
             id: i,
             type: randomType,
-            user: getRandomName(),
-            customer: getRandomName(),
+            user: getRandomName(users),
+            customer: getRandomName(users),
             date: randomDate.toISOString().slice(0, 10), // Format date as "YYYY-MM-DD"
             message:
                 'Löksås ipsum jäst där se vad plats ...',
@@ -284,10 +467,9 @@ function fakeItems() {
 }
 
 // Function to generate a random name
-function getRandomName() {
-    const firstNames = ["Alex", "Olivia", "Liam", "Sophia", "Mia", "Noah", "Ava", "Ethan"];
+function getRandomName(users) {
 
-    return firstNames[Math.floor(Math.random() * firstNames.length)];
+    return users[Math.floor(Math.random() * users.length)];
 }
 
 export default BookingAdminPanel;
