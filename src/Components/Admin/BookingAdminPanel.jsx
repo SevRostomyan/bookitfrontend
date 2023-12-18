@@ -25,10 +25,20 @@ class BookingAdminPanel extends Component {
                 customerFilter: '',
                 typeFilter: '',
             },
+            editingItem: null,
             selectedItemToDelete: null,
             showDeleteConfirmation: false,
+            items: fakeItems(this.cleaningTypes, this.users),
         };
     }
+
+    toggleEditForm = (item) => {
+        this.setState((prevState) => ({
+            editingItem: prevState.editingItem === item ? null : item,
+            showAddForm: true,
+            newItem: prevState.editingItem === item ? this.resetItemForm() : { ...item },
+        }));
+    };
 
     toggleAddForm = () => {
         this.setState((prevState) => ({
@@ -51,13 +61,29 @@ class BookingAdminPanel extends Component {
 
         // Perform validation if needed
 
-        // Add the new item to the items array
-        this.items.push({
-            id: this.items.length + 1,
-            ...this.state.newItem,
-        });
+        if (this.state.editingItem) {
+
+            // Update the existing item
+            const updatedItems = this.state.items.map(item =>
+                item.id === this.state.editingItem.id ? { ...item, ...this.state.newItem } : item
+            );
+
+            this.setState(prevState => ({
+                items: updatedItems,
+            }));
+        } else {
+            // Add the new item to the items array
+            this.items.push({
+                id: this.items.length + 1,
+                ...this.state.newItem,
+            });
+        }
 
         // Close the add form and reset form data
+        this.resetItemForm();
+    };
+
+    resetItemForm = () => {
         this.setState({
             showAddForm: false,
             newItem: {
@@ -68,6 +94,7 @@ class BookingAdminPanel extends Component {
                 message: '',
                 price: '',
             },
+            editingItem: null,
         });
     };
 
@@ -364,10 +391,16 @@ class BookingAdminPanel extends Component {
                                             </div>
 
                                             {/* Submit button */}
-                                            <div className="w-fit mt-4">
+                                            <div className="w-fit mt-4 flex">
                                                 <button type="submit" className="button button-success">
-                                                    Lägg till
+                                                    {this.state.editingItem ? 'Uppdatera' : 'Lägg till'}
                                                 </button>
+                                                {this.state.editingItem && (
+                                                    <button type="button" className="button button-secondary ml-2"
+                                                            onClick={this.resetItemForm}>
+                                                        Avbryt
+                                                    </button>
+                                                )}
                                             </div>
                                         </form>
                                     </div>
@@ -404,7 +437,8 @@ class BookingAdminPanel extends Component {
                                     <td className="text-center w-12">{item.price} kr</td>
                                     <td className="flex">
                                         {/* Edit btn */}
-                                        <button className="button button-link px-0">
+                                        <button className="button button-link px-0"
+                                                onClick={() => this.toggleEditForm(item)}>
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6">
                                                 <path strokeLinecap="round" strokeLinejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
                                             </svg>
