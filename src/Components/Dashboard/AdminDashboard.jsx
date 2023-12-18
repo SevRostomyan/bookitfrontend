@@ -5,6 +5,7 @@ import BookingManagement from './BookingManagement';
 import PaymentManagement from './PaymentManagement';
 import RegisterUserForm from './RegisterUserForm';
 import UsersList from './UsersList';
+import UserManagement from './UserManagement';
 
 function AdminDashboard() {
     const navigate = useNavigate();
@@ -19,7 +20,7 @@ function AdminDashboard() {
         <div className="dashboard">
             <div className="dashboard-welcome">ADMINISTRATÖR</div>
             <div className="dashboard-options">
-                <button className="dashboard-button" onClick={() => navigateTo('/admin/users')}>Användare</button>
+                <button className="dashboard-button" onClick={() => navigateTo('/admin/user-management')}>Användare</button>
                 <button className="dashboard-button" onClick={() => navigateTo('/admin/bookings')}>Bokningar</button>
                 <button className="dashboard-button" onClick={() => navigateTo('/admin/payments')}>Betalningar</button>
                 <button className="dashboard-button" onClick={() => navigateTo('/admin/register')}>Registrera Användare</button>
@@ -29,6 +30,7 @@ function AdminDashboard() {
                 <Route path="/admin/bookings" element={<BookingManagement />} />
                 <Route path="/admin/payments" element={<PaymentManagement />} />
                 <Route path="/admin/register" element={<RegisterUserForm />} />
+                <Route path="/admin/user-management" element={<UserManagement />} />
             </Routes>
         </div>
     );
