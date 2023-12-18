@@ -9,6 +9,11 @@ function RegisterUserForm({ onUserAdded }) {
         role: 'KUND'
     });
 
+    const handleChange = (event) => {
+        const { name, value } = event.target;
+        setUserData({ ...userData, [name]: value });
+    };
+
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
@@ -28,16 +33,53 @@ function RegisterUserForm({ onUserAdded }) {
         }
     };
 
-    // Formulärfält för användaruppgifter och submit-knapp här
-
     return (
         <form onSubmit={handleSubmit}>
-            {/* Formulärfält för användaruppgifter */}
+            <input
+                type="text"
+                name="firstname"
+                value={userData.firstname}
+                onChange={handleChange}
+                placeholder="Förnamn"
+                required
+            />
+            <input
+                type="text"
+                name="lastname"
+                value={userData.lastname}
+                onChange={handleChange}
+                placeholder="Efternamn"
+                required
+            />
+            <input
+                type="email"
+                name="email"
+                value={userData.email}
+                onChange={handleChange}
+                placeholder="Email"
+                required
+            />
+            <input
+                type="password"
+                name="password"
+                value={userData.password}
+                onChange={handleChange}
+                placeholder="Lösenord"
+                required
+            />
+            <select
+                name="role"
+                value={userData.role}
+                onChange={handleChange}
+                required
+            >
+                <option value="KUND">Kund</option>
+                <option value="STÄDARE">Städare</option>
+                <option value="ADMIN">Admin</option>
+            </select>
             <button type="submit">Registrera Användare</button>
         </form>
     );
-
-
 }
 
 export default RegisterUserForm;
