@@ -85,21 +85,21 @@ const CustomerDashboard = () => {
                 });
         };
 
-        return (
-            <div className="customer-dashboard">
-                <div className="welcome-message">
-                    VÄLKOMMEN KÄRA KUND
-                </div>
-                <div className="options">
-                    <button className="option-button" onClick={handleNewBookingClick}>BOKA OCH LÄMNA FEEDBACK</button>
-                    <button className="option-button" onClick={handleMyBookingsClick}>MINA BOKNINGAR</button>
-                    <button className="option-button" onClick={handleHistoryClick}>HISTORIK</button>
-                    <button className="option-button" onClick={handlePaymentMethodsClick}>BETALNINGSMETODER</button>
-                </div>
+    return (
+        <div className="dashboard">
+            <div className="dashboard-welcome">
+                VÄLKOMMEN KÄRA KUND
             </div>
-        );
-    };
+            <div className="dashboard-options">
+                <button className="dashboard-button" onClick={handleNewBookingClick}>BOKA</button>
+                <button className="dashboard-button" onClick={handleMyBookingsClick}>MINA BOKNINGAR</button>
+                <button className="dashboard-button" onClick={handleHistoryClick}>HISTORIK</button>
+                <button className="dashboard-button" onClick={handlePaymentMethodsClick}>BETALNINGSMETODER</button>
+            </div>
+        </div>
+    );
+};
 
-    export default CustomerDashboard;
+export default CustomerDashboard;
 
 
