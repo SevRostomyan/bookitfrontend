@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import { useAuth } from "../../AuthContext";
 
 function UserManagement() {
     const [searchTerm, setSearchTerm] = useState('');
     const [users, setUsers] = useState([]);
+    const { auth } = useAuth();
 
     useEffect(() => {
         if (searchTerm) {
@@ -12,11 +14,12 @@ function UserManagement() {
 
     const searchUsers = async (query) => {
         try {
+            const token = auth.token;
             const userType = query.includes('@') ? 'städare' : 'kunder'; // Antag att e-postadress indikerar en städare
             const response = await fetch(`http://localhost:7878/api/admin/search/${userType}?query=${query}`, {
                 method: 'GET',
                 headers: {
-                    'Authorization': `Bearer YOUR_TOKEN`
+                    'Authorization': `Bearer ${token}`
                 }
             });
             if (!response.ok) {

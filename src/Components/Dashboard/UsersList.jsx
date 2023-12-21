@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-
+import { useAuth } from "../../AuthContext";
 function UsersList() {
     const [users, setUsers] = useState([]);
+    const { auth } = useAuth();
 
     useEffect(() => {
         fetchUsers();
@@ -9,10 +10,11 @@ function UsersList() {
 
     const fetchUsers = async () => {
         try {
+            const token = auth.token;
             const response = await fetch('http://localhost:7878/api/admin/users', {
                 method: 'GET',
                 headers: {
-                    'Authorization': `Bearer YOUR_TOKEN`
+                    'Authorization': `Bearer ${token}`
                 }
             });
             if (!response.ok) {
