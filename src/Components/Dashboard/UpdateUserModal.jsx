@@ -27,6 +27,9 @@ function UpdateUserModal({ user, onClose, onUpdate }) {
                     <label>Email:</label>
                     <input type="email" name="email" value={updatedUser.email} onChange={handleChange} />
 
+                    <label>Lösenord:</label>
+                    <input type="password" name="password" value={updatedUser.password} onChange={handleChange} />
+
                     <button type="submit">Uppdatera Användare</button>
                 </form>
             </div>
