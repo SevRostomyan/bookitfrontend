@@ -2,43 +2,41 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from "../../AuthContext";
 
 function UserManagement() {
-    const [cleaners, setCleaners] = useState([]);
-    const [customers, setCustomers] = useState([]);
+    const [users, setUsers] = useState([]);
     const { auth } = useAuth();
 
     useEffect(() => {
-        fetchUsers('städare', setCleaners);
-        fetchUsers('kunder', setCustomers);
+        fetchUsers();
     }, []);
 
-    const fetchUsers = async (userType, setUserList) => {
+    const fetchUsers = async () => {
         try {
             const token = auth.token;
-            const response = await fetch(`http://localhost:7878/api/admin/${userType}/all`, {
+            const response = await fetch('http://localhost:7878/api/admin/users/all', {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
             });
             if (!response.ok) {
-                throw new Error(`Failed to fetch ${userType}`);
+                throw new Error('Failed to fetch users');
             }
             const data = await response.json();
-            setUserList(data);
+            setUsers(data);
         } catch (error) {
             console.error('Error:', error);
         }
     };
 
     const updateUser = (userId) => {
-        // Öppna en modal för att uppdatera användaren
+        // Öppna en modal eller navigera till en sida för att uppdatera användaren
         console.log(`Öppnar uppdateringsmodal för användare ${userId}`);
     };
 
-    const deleteUser = async (userId, userType) => {
+    const deleteUser = async (userId) => {
         try {
             const token = auth.token;
-            const response = await fetch(`http://localhost:7878/api/admin/${userType}/delete`, {
+            const response = await fetch(`http://localhost:7878/api/admin/users/delete`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
@@ -49,9 +47,8 @@ function UserManagement() {
             if (!response.ok) {
                 throw new Error(`Failed to delete user ${userId}`);
             }
-            // Uppdatera listorna efter borttagning
-            fetchUsers('städare', setCleaners);
-            fetchUsers('kunder', setCustomers);
+            // Uppdatera listan efter borttagning
+            fetchUsers();
         } catch (error) {
             console.error('Error:', error);
         }
@@ -60,26 +57,27 @@ function UserManagement() {
     return (
         <div>
             <h2>Användarhantering</h2>
-            <div>
-                <h3>Städare</h3>
-                {cleaners.map(cleaner => (
-                    <div key={cleaner.id}>
-                        {cleaner.name}
-                        <button onClick={() => updateUser(cleaner.id)}>Uppdatera</button>
-                        <button onClick={() => deleteUser(cleaner.id, 'städare')}>Ta bort</button>
-                    </div>
+            <table>
+                <thead>
+                <tr>
+                    <th>Namn</th>
+                    <th>Roll</th>
+                    <th>Åtgärder</th>
+                </tr>
+                </thead>
+                <tbody>
+                {users.map(user => (
+                    <tr key={user.id}>
+                        <td>{user.name}</td>
+                        <td>{user.role}</td>
+                        <td>
+                            <button onClick={() => updateUser(user.id)}>Uppdatera</button>
+                            <button onClick={() => deleteUser(user.id)}>Ta bort</button>
+                        </td>
+                    </tr>
                 ))}
-            </div>
-            <div>
-                <h3>Kunder</h3>
-                {customers.map(customer => (
-                    <div key={customer.id}>
-                        {customer.name}
-                        <button onClick={() => updateUser(customer.id)}>Uppdatera</button>
-                        <button onClick={() => deleteUser(customer.id, 'kund')}>Ta bort</button>
-                    </div>
-                ))}
-            </div>
+                </tbody>
+            </table>
         </div>
     );
 }
