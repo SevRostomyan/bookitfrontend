@@ -91,7 +91,7 @@ function UserManagement() {
                 <h3>Städare</h3>
                 {cleaners.map(cleaner => (
                     <div key={cleaner.id}>
-                        {cleaner.firstname} {cleaner.lastname} {cleaner.password} ({cleaner.email})
+                        {cleaner.firstname} {cleaner.lastname} ({cleaner.email})
                         <button onClick={() => handleDeleteUser(cleaner.id, 'städare')}>Ta bort</button>
                         <button onClick={() => handleUpdateUser(cleaner)}>Uppdatera</button>
                     </div>
@@ -101,7 +101,7 @@ function UserManagement() {
                 <h3>Kunder</h3>
                 {customers.map(customer => (
                     <div key={customer.id}>
-                        {customer.firstname} {customer.lastname} {customer.password} ({customer.email})
+                        {customer.firstname} {customer.lastname} ({customer.email})
                         <button onClick={() => handleDeleteUser(customer.id, 'kund')}>Ta bort</button>
                         <button onClick={() => handleUpdateUser(customer)}>Uppdatera</button>
                     </div>
