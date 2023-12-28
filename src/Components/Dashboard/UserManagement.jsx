@@ -91,7 +91,7 @@ function UserManagement() {
                 <h3>Städare</h3>
                 {cleaners.map(cleaner => (
                     <div key={cleaner.id}>
-                        {cleaner.firstname} {cleaner.lastname} {cleaner.lastname} ({cleaner.email})
+                        {cleaner.firstname} {cleaner.lastname} {cleaner.password} ({cleaner.email})
                         <button onClick={() => handleDeleteUser(cleaner.id, 'städare')}>Ta bort</button>
                         <button onClick={() => handleUpdateUser(cleaner)}>Uppdatera</button>
                     </div>
