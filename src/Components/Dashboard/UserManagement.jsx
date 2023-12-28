@@ -2,31 +2,56 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from "../../AuthContext";
 
 function UserManagement() {
-    const [searchTerm, setSearchTerm] = useState('');
-    const [users, setUsers] = useState([]);
+    const [cleaners, setCleaners] = useState([]);
+    const [customers, setCustomers] = useState([]);
     const { auth } = useAuth();
 
     useEffect(() => {
-        if (searchTerm) {
-            searchUsers(searchTerm);
-        }
-    }, [searchTerm]);
+        fetchUsers('städare', setCleaners);
+        fetchUsers('kunder', setCustomers);
+    }, []);
 
-    const searchUsers = async (query) => {
+    const fetchUsers = async (userType, setUserList) => {
         try {
             const token = auth.token;
-            const userType = query.includes('@') ? 'städare' : 'kunder'; // Antag att e-postadress indikerar en städare
-            const response = await fetch(`http://localhost:7878/api/admin/search/${userType}?query=${query}`, {
+            const response = await fetch(`http://localhost:7878/api/admin/${userType}/all`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
             });
             if (!response.ok) {
-                throw new Error(`Failed to fetch users`);
+                throw new Error(`Failed to fetch ${userType}`);
             }
             const data = await response.json();
-            setUsers(data);
+            setUserList(data);
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    };
+
+    const updateUser = (userId) => {
+        // Öppna en modal för att uppdatera användaren
+        console.log(`Öppnar uppdateringsmodal för användare ${userId}`);
+    };
+
+    const deleteUser = async (userId, userType) => {
+        try {
+            const token = auth.token;
+            const response = await fetch(`http://localhost:7878/api/admin/${userType}/delete`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({ userId })
+            });
+            if (!response.ok) {
+                throw new Error(`Failed to delete user ${userId}`);
+            }
+            // Uppdatera listorna efter borttagning
+            fetchUsers('städare', setCleaners);
+            fetchUsers('kunder', setCustomers);
         } catch (error) {
             console.error('Error:', error);
         }
@@ -35,16 +60,24 @@ function UserManagement() {
     return (
         <div>
             <h2>Användarhantering</h2>
-            <input
-                type="text"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                placeholder="Sök användare..."
-            />
-            <button onClick={() => searchUsers(searchTerm)}>Sök</button>
             <div>
-                {users.map(user => (
-                    <div key={user.id}>{user.name}</div> // Antag att varje användare har ett id och namn
+                <h3>Städare</h3>
+                {cleaners.map(cleaner => (
+                    <div key={cleaner.id}>
+                        {cleaner.name}
+                        <button onClick={() => updateUser(cleaner.id)}>Uppdatera</button>
+                        <button onClick={() => deleteUser(cleaner.id, 'städare')}>Ta bort</button>
+                    </div>
+                ))}
+            </div>
+            <div>
+                <h3>Kunder</h3>
+                {customers.map(customer => (
+                    <div key={customer.id}>
+                        {customer.name}
+                        <button onClick={() => updateUser(customer.id)}>Uppdatera</button>
+                        <button onClick={() => deleteUser(customer.id, 'kund')}>Ta bort</button>
+                    </div>
                 ))}
             </div>
         </div>
