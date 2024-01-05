@@ -2,9 +2,9 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    background-color: #f6f8fb;
-    padding: 0 15vw;
+    /*height: 100vh;*/
+    /*background-color: #f6f8fb;*/
+    /*padding: 0 15vw;*/
 }
 
 .booking-form {

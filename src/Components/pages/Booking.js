@@ -4,7 +4,8 @@ import BookedClean from "../BookedCleanings/BookedClean";
 import '../../assets/CleaningApproval.css';
 import CleaningApproval from "../CleaningApproval1/CleaningApproval";
 import DataRefreshButton from '../BookedCleanings/DataRefreshButton';
-import { withBookings } from '../../WithBookings'; // HOC
+import { withBookings } from '../../WithBookings';
+import BookingConfirmation from "../Booking/BookingConfirmation"; // HOC
 
 class Booking extends Component {
 
@@ -18,8 +19,9 @@ class Booking extends Component {
 
         return (
             <div>
-                <div><DataRefreshButton onRefresh={fetchReportedCompletedBookings} refreshAll /></div>
-                <div className=""><BookingForm /></div>
+                <div className="mx-auto max-w-xl"><DataRefreshButton onRefresh={fetchReportedCompletedBookings} refreshAll /></div>
+                <div className="pt-4 mt-4"><BookingForm /></div>
+                <div className="pt-4 mt-4"><BookingConfirmation /></div>
                 <div className="pt-4 mt-4"><BookedClean /></div>
                 <div className="pt-4 mt-4"><CleaningApproval cleaning={cleaningData} /></div>
             </div>
