@@ -1,3 +1,4 @@
+/* Grundläggande Dashboard-styling */
 .dashboard {
     display: flex;
     flex-direction: column;
@@ -22,7 +23,7 @@
     background-color: #E8EAF6;
     color: #333;
     width: 80%;
-    max-width: 800px; /* Adjust width as necessary */
+    max-width: 800px; /* Justera bredd vid behov */
 }
 
 .dashboard-welcome {
@@ -50,14 +51,69 @@
     background-color: #2C5170;
 }
 
+/* Tabell-styling */
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+th {
+    background-color: #4CAF50;
+    color: white;
+}
+
+/* Popup-styling */
+.popup {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    padding: 15px;
+    border-radius: 5px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+/* Responsiv design */
 @media (max-width: 768px) {
     .dashboard-sidebar {
         width: 100%;
         position: static;
-        order: -1; /* Bring the sidebar to the top on small screens */
+        order: -1; /* Flytta sidebar till toppen på små skärmar */
     }
 
-    .dashboard-content {
+    .dashboard-content, table {
         width: 95%;
     }
+}
+
+/* Knapp- och Interaktiva Element-styling */
+.button {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 5px;
+}
+
+.button:hover {
+    background-color: #0056b3;
+}
+
+/* Övergripande Layout och Marginaler */
+.dashboard-content {
+    padding: 20px;
+    margin-bottom: 20px; /* Lägg till marginaler vid behov */
 }

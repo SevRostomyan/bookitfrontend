@@ -1,29 +1,84 @@
 import React, { useState, useEffect } from 'react';
+import { useAuth } from "../../AuthContext";
+import UpdateUserModal from './UpdateUserModal';
 
 function UserManagement() {
-    const [searchTerm, setSearchTerm] = useState('');
-    const [users, setUsers] = useState([]);
+    const [cleaners, setCleaners] = useState([]);
+    const [customers, setCustomers] = useState([]);
+    const [selectedUser, setSelectedUser] = useState(null);
+    const [showModal, setShowModal] = useState(false);
+    const { auth } = useAuth();
 
     useEffect(() => {
-        if (searchTerm) {
-            searchUsers(searchTerm);
-        }
-    }, [searchTerm]);
+        refreshUsers();
+    }, []);
 
-    const searchUsers = async (query) => {
+    const refreshUsers = () => {
+        fetchUsers('städare/all', setCleaners);
+        fetchUsers('kunder/all', setCustomers);
+    };
+
+    const fetchUsers = async (endpoint, setUserList) => {
         try {
-            const userType = query.includes('@') ? 'städare' : 'kunder'; // Antag att e-postadress indikerar en städare
-            const response = await fetch(`http://localhost:7878/api/admin/search/${userType}?query=${query}`, {
+            const token = auth.token;
+
+            const response = await fetch(`http://localhost:7878/api/admin/${endpoint}`, {
                 method: 'GET',
                 headers: {
-                    'Authorization': `Bearer YOUR_TOKEN`
+                    'Authorization': `Bearer ${token}`
                 }
             });
             if (!response.ok) {
-                throw new Error(`Failed to fetch users`);
+                throw new Error('Failed to fetch users');
             }
             const data = await response.json();
-            setUsers(data);
+            setUserList(data);
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    };
+
+    const handleDeleteUser = async (userId, userType) => {
+        try {
+            const token = auth.token;
+            const response = await fetch(`http://localhost:7878/api/admin/${userType}/delete`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ userId })
+            });
+            if (!response.ok) {
+                throw new Error('Failed to delete user');
+            }
+            refreshUsers(); // Uppdatera listan med användare
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    };
+
+    const handleUpdateUser = (user) => {
+        setSelectedUser(user);
+        setShowModal(true);
+    };
+
+    const onUpdateUser = async (updatedUser) => {
+        try {
+            const token = auth.token;
+            const response = await fetch(`http://localhost:7878/api/admin/users/update`, {
+                method: 'PATCH',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(updatedUser)
+            });
+            if (!response.ok) {
+                throw new Error('Failed to update user');
+            }
+            setShowModal(false);
+            refreshUsers(); // Uppdatera listan med användare
         } catch (error) {
             console.error('Error:', error);
         }
@@ -32,18 +87,27 @@ function UserManagement() {
     return (
         <div>
             <h2>Användarhantering</h2>
-            <input
-                type="text"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                placeholder="Sök användare..."
-            />
-            <button onClick={() => searchUsers(searchTerm)}>Sök</button>
             <div>
-                {users.map(user => (
-                    <div key={user.id}>{user.name}</div> // Antag att varje användare har ett id och namn
+                <h3>Städare</h3>
+                {cleaners.map(cleaner => (
+                    <div key={cleaner.id}>
+                        {cleaner.firstname} {cleaner.lastname} ({cleaner.email})
+                        <button onClick={() => handleDeleteUser(cleaner.id, 'städare')}>Ta bort</button>
+                        <button onClick={() => handleUpdateUser(cleaner)}>Uppdatera</button>
+                    </div>
                 ))}
             </div>
+            <div>
+                <h3>Kunder</h3>
+                {customers.map(customer => (
+                    <div key={customer.id}>
+                        {customer.firstname} {customer.lastname} ({customer.email})
+                        <button onClick={() => handleDeleteUser(customer.id, 'kund')}>Ta bort</button>
+                        <button onClick={() => handleUpdateUser(customer)}>Uppdatera</button>
+                    </div>
+                ))}
+            </div>
+            {showModal && <UpdateUserModal user={selectedUser} onClose={() => setShowModal(false)} onUpdate={onUpdateUser} />}
         </div>
     );
 }
