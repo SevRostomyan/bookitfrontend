@@ -33,11 +33,13 @@ function BookingManagement() {
     const fetchAvailableCleaners = async (bookingTime) => {
         try {
             const token = auth.token;
-            const response = await fetch(`http://localhost:7878/api/admin/available-cleaners?bookingTime=${bookingTime}`, {
+            const response = await fetch(`http://localhost:7878/api/admin/available-cleaners`, {
                 method: 'GET',
                 headers: {
-                    'Authorization': `Bearer ${token}`
-                }
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ bookingTime:bookingTime })
             });
             if (!response.ok) {
                 throw new Error('Failed to fetch available cleaners');
