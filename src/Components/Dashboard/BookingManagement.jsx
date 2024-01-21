@@ -34,7 +34,7 @@ function BookingManagement() {
         try {
             const token = auth.token;
             const response = await fetch(`http://localhost:7878/api/admin/available-cleaners`, {
-                method: 'GET',
+                method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json',
