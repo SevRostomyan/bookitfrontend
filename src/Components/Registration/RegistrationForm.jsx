@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import '../../assets/Req.css';
+import { useNavigate } from 'react-router-dom';
 
 const Registration = () => {
   const [formData, setFormData] = useState({
@@ -15,6 +16,11 @@ const Registration = () => {
     email: '',
     password: '',
   });
+
+
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const navigate = useNavigate();
+
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -85,13 +91,26 @@ const Registration = () => {
         const result = await response.json();
         console.log('Registration response:', result);
 
-        // Du kan hantera svaret här och uppdatera din komponent om det behövs.
-
+        if (response.ok) {
+          setShowSuccessModal(true);
+        } else {
+          // Handle unsuccessful registration
+        }
       } catch (error) {
         console.error('Error making registration request:', error);
       }
     }
   };
+
+  const SuccessModal = () => (
+      <div className="modal">
+        <div className="modal-content">
+          <p>Registreringen av ditt användarkonto lyckades. Logga in eller gå till startsidan.</p>
+          <button onClick={() => navigate('/login')}>Logga in</button>
+          <button onClick={() => navigate('/')}>Gå till startsidan</button>
+        </div>
+      </div>
+  );
 
   return (
       <div className="registration">
@@ -147,6 +166,7 @@ const Registration = () => {
           </div>
           <button type="submit">Registrera</button>
         </form>
+        {showSuccessModal && <SuccessModal />}
       </div>
   );
 };
