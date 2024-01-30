@@ -55,12 +55,19 @@
 table {
     width: 100%;
     border-collapse: collapse;
+    background-color: #ffffff;
+    color: #333;
+    margin-top: 20px;
 }
 
 th, td {
     border: 1px solid #ddd;
     padding: 8px;
     text-align: left;
+}
+
+tr:hover {
+    background-color: #ddd;
 }
 
 tr:nth-child(even) {
