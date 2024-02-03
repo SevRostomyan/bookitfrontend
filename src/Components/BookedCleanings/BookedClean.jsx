@@ -2,9 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { useBookings } from '../../BookingsContext';
 import '../../assets/BookedClean.css';
 import DataRefreshButton from '../BookedCleanings/DataRefreshButton';
-
+import {useAuth} from "../../AuthContext";
 const Bookings = () => {
     const { bookings, fetchBookings } = useBookings();
+    const { auth } = useAuth(); // Use the useAuth hook
     const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
@@ -13,10 +14,9 @@ const Bookings = () => {
 
     const cancelBooking = async (bookingId) => {
         setIsLoading(true);
-        // Add your token retrieval logic here
-        const token = 'YOUR_JWT_TOKEN'; // Replace with logic to retrieve JWT token
+        const token = auth.token; // Use the token from the AuthContext
         try {
-            const response = await fetch('http://localhost:7878/api/booking/cancelBooking', {
+            const response = await fetch('http://localhost:7878/api/bokning/cancelBooking', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
