@@ -90,17 +90,27 @@ function BookingManagement() {
             <table>
                 <thead>
                 <tr>
-                    <th>Beskrivning</th>
+
+                    <th>Kund</th>
+                    <th>Bokningsdress</th>
                     <th>Bokningstid</th>
+                    <th>Tjänst</th>
+                    <th>Kundmeddelande</th>
                     <th>Välj</th>
+
                 </tr>
                 </thead>
                 <tbody>
                 {bookings.map(booking => (
                     <tr key={booking.id}>
-                        <td>{booking.description}</td>
+                        <td>{booking.kund.firstname+ " " + booking.kund.lastname}</td>
+                        <td>{booking.adress}</td>
                         <td>{booking.bookingTime}</td>
-                        <td><button onClick={() => handleSelectBooking(booking)}>Välj</button></td>
+                        <td>{booking.tjänst}</td>
+                        <td>{booking.messageAtBooking}</td>
+                        <td>
+                            <button onClick={() => handleSelectBooking(booking)}>Välj</button>
+                        </td>
                     </tr>
                 ))}
                 </tbody>
