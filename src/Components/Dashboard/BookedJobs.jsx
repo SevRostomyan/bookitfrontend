@@ -34,14 +34,20 @@ const BookedJobs = () => {
                 throw new Error(`Failed to fetch jobs from ${endpoint}`);
             }
 
-            const data = await response.json();
-            setState(data);
+            const contentType = response.headers.get('content-type');
+            if (contentType && contentType.indexOf('application/json') !== -1) {
+                const data = await response.json();
+                setState(data);
+            } else {
+                throw new Error('No JSON content in response');
+            }
         } catch (error) {
             setError(error.message);
         } finally {
             setIsLoading(false);
         }
     };
+
 
     const startCleaning = async (cleaningId) => {
         try {
@@ -143,4 +149,4 @@ const renderJobsTable = (title, jobs, actionHandler, actionButtonText) => {
         </>
     );
 };
-
+export default BookedJobs
