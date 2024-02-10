@@ -5,7 +5,7 @@ function BookingManagement() {
     const [bookings, setBookings] = useState([]);
     const [selectedBooking, setSelectedBooking] = useState(null);
     const [availableCleaners, setAvailableCleaners] = useState([]);
-    const { auth } = useAuth();
+    const {auth} = useAuth();
 
     useEffect(() => {
         fetchNotAssignedBookings();
@@ -39,7 +39,7 @@ function BookingManagement() {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ bookingTime:bookingTime })
+                body: JSON.stringify({bookingTime: bookingTime})
             });
             if (!response.ok) {
                 throw new Error('Failed to fetch available cleaners');
@@ -60,7 +60,7 @@ function BookingManagement() {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`
                 },
-                body: JSON.stringify({ bookingId, cleanerId })
+                body: JSON.stringify({bookingId, cleanerId})
             });
             if (!response.ok) {
                 throw new Error('Failed to assign cleaning');
@@ -103,7 +103,7 @@ function BookingManagement() {
                 <tbody>
                 {bookings.map(booking => (
                     <tr key={booking.id}>
-                        <td>{booking.kund.firstname+ " " + booking.kund.lastname}</td>
+                        <td>{booking.kund.firstname + " " + booking.kund.lastname}</td>
                         <td>{booking.adress}</td>
                         <td>{booking.bookingTime}</td>
                         <td>{booking.tjänst}</td>
@@ -118,17 +118,33 @@ function BookingManagement() {
             {selectedBooking && (
                 <>
                     <h3>Tillgängliga städare för vald bokning</h3>
-                    <ul>
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>Namn</th>
+                            <th>Efternamn</th>
+                            <th>Email</th>
+                            <th>Välj</th>
+                        </tr>
+                        </thead>
+                        <tbody>
                         {availableCleaners.map(cleaner => (
-                            <li key={cleaner.id} onClick={() => handleAssignCleaning(cleaner.id)}>
-                                {cleaner.name}
-                            </li>
+                            <tr key={cleaner.id}>
+                                <td>{cleaner.firstname}</td>
+                                <td>{cleaner.lastname}</td>
+                                <td>{cleaner.email}</td>
+                                <td>
+                                    <button onClick={() => handleAssignCleaning(cleaner.id)}>Välj</button>
+                                </td>
+                            </tr>
                         ))}
-                    </ul>
+                        </tbody>
+                    </table>
                 </>
             )}
         </div>
     );
+
 }
 
 export default BookingManagement;

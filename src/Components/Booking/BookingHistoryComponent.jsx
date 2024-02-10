@@ -5,18 +5,19 @@ function BookingHistoryComponent() {
     const [bookingHistory, setBookingHistory] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
-    const { auth } = useAuth();
+    const {auth} = useAuth();
 
     useEffect(() => {
         const userId = auth.user.id;
         const token = auth.token;
 
-        fetch(`http://localhost:7878/api/bokning/getAllBookingsByUserId/${userId}`, {
-            method: 'GET',
+        fetch(`http://localhost:7878/api/bokning/getAllBookingsByUserId`, {
+            method: 'POST',
             headers: {
                 'Authorization': `Bearer ${token}`,
                 'Content-Type': 'application/json'
             },
+            body: JSON.stringify({userId})
         })
             .then(response => {
                 if (!response.ok) {
@@ -51,6 +52,8 @@ function BookingHistoryComponent() {
                     <th>Sluttid</th>
                     <th>Adress</th>
                     <th>Meddelande vid bokning</th>
+                    <th>Rapporterad tid</th>
+                    <th>Kundfeedback</th>
                     <th>Status</th>
                     <th>Rapportstatus</th>
                 </tr>
@@ -66,6 +69,8 @@ function BookingHistoryComponent() {
                         <td>{booking.endTime}</td>
                         <td>{booking.adress}</td>
                         <td>{booking.messageAtBooking}</td>
+                        <td>{booking.cleaningReportedTime}</td>
+                        <td>{booking.customerFeedback}</td>
                         <td>{booking.status}</td>
                         <td>{booking.cleaningReportStatus}</td>
                     </tr>
@@ -74,6 +79,7 @@ function BookingHistoryComponent() {
             </table>
         </div>
     );
+
 }
 
 export default BookingHistoryComponent;
