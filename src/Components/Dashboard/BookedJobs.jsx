@@ -19,7 +19,6 @@ const BookedJobs = () => {
                         'Authorization': `Bearer ${auth.token}`,
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({ userId: auth.user.id }),
                 });
 
                 if (!response.ok) {
@@ -36,7 +35,7 @@ const BookedJobs = () => {
         };
 
         fetchBookedJobs();
-    }, [auth.token, auth.user.id]);
+    }, [auth.token]);
 
     if (isLoading) return <div>Loading...</div>;
     if (error) return <div>Error: {error}</div>;
@@ -53,19 +52,33 @@ const BookedJobs = () => {
                         <th>Städare</th>
                         <th>Tjänst</th>
                         <th>Bokningstid</th>
+                        <th>Sluttid</th>
+                        <th>Adress</th>
+                        <th>Meddelande vid bokning</th>
+                        <th>Rapporterad tid</th>
+                        <th>Kundfeedback</th>
                         <th>Status</th>
+                        <th>Rapportstatus</th>
                     </tr>
                     </thead>
                     <tbody>
-                    {bookedJobs.map((job) => (
-                        <tr key={job.id}>
-                            <td>{job.id}</td>
-                            <td>{job.kund.firstname} {job.kund.lastname}</td>
-                            <td>{job.städare ? `${job.städare.firstname} ${job.städare.lastname}` : 'Ej tilldelad'}</td>
-                            <td>{job.tjänst}</td>
-                            <td>{job.bookingTime}</td>
-                            <td>{job.status}</td>
-                        </tr>
+                    {bookedJobs.map(booking => (
+                        booking && (
+                            <tr key={booking.id}>
+                                <td>{booking.id}</td>
+                                <td>{booking.kund?.firstname} {booking.kund?.lastname}</td>
+                                <td>{booking.städare?.firstname} {booking.städare?.lastname}</td>
+                                <td>{booking.tjänst}</td>
+                                <td>{booking.bookingTime}</td>
+                                <td>{booking.endTime}</td>
+                                <td>{booking.adress}</td>
+                                <td>{booking.messageAtBooking}</td>
+                                <td>{booking.cleaningReportedTime}</td>
+                                <td>{booking.customerFeedback}</td>
+                                <td>{booking.status}</td>
+                                <td>{booking.cleaningReportStatus}</td>
+                            </tr>
+                        )
                     ))}
                     </tbody>
                 </table>
