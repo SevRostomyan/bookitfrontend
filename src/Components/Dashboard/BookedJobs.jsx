@@ -104,41 +104,43 @@ const BookedJobs = () => {
     );
 };
 
-const renderJobsTable = (title, jobs, actionHandler, actionButtonText) => (
-    <>
-        <h3>{title}</h3>
-        {jobs.length > 0 ? (
-            <table>
-                <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Kund</th>
-                    <th>Städare</th>
-                    <th>Tjänst</th>
-                    <th>Bokningstid</th>
-                    <th>Status</th>
-                    <th>Åtgärd</th>
-                </tr>
-                </thead>
-                <tbody>
-                {jobs.map((job) => (
-                    <tr key={job.id}>
-                        <td>{job.id}</td>
-                        <td>{job.kund.firstname} {job.kund.lastname}</td>
-                        <td>{job.städare ? `${job.städare.firstname} ${job.städare.lastname}` : 'Ej tilldelad'}</td>
-                        <td>{job.tjänst}</td>
-                        <td>{job.bookingTime}</td>
-                        <td>{job.status}</td>
-                        <td>
-                            <button onClick={() => actionHandler(job.id)}>{actionButtonText}</button>
-                        </td>
+const renderJobsTable = (title, jobs, actionHandler, actionButtonText) => {
+    return (
+        <>
+            <h3>{title}</h3>
+            {jobs.length > 0 ? (
+                <table>
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Kund</th>
+                        <th>Städare</th>
+                        <th>Tjänst</th>
+                        <th>Bokningstid</th>
+                        <th>Status</th>
+                        <th>Åtgärd</th>
                     </tr>
-                ))}
-                </tbody>
-            </table>
-        ) : (
-            <p>Inga jobb hittades.</p>
-        )}
-    </>
-);
-export default BookedJobs;
+                    </thead>
+                    <tbody>
+                    {jobs.map((job) => (
+                        <tr key={job.id}>
+                            <td>{job.id}</td>
+                            <td>{job.kund.firstname} {job.kund.lastname}</td>
+                            <td>{job.städare ? `${job.städare.firstname} ${job.städare.lastname}` : 'Ej tilldelad'}</td>
+                            <td>{job.tjänst}</td>
+                            <td>{job.bookingTime}</td>
+                            <td>{job.status}</td>
+                            <td>
+                                <button onClick={() => actionHandler(job.id)}>{actionButtonText}</button>
+                            </td>
+                        </tr>
+                    ))}
+                    </tbody>
+                </table>
+            ) : (
+                <p>Det finns inga inbokade jobb just nu.</p>
+            )}
+        </>
+    );
+};
+
