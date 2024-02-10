@@ -8,16 +8,14 @@ function BookingHistoryComponent() {
     const {auth} = useAuth();
 
     useEffect(() => {
-        const userId = auth.user.id;
-        const token = auth.token;
-
+        setIsLoading(true);
         fetch(`http://localhost:7878/api/bokning/getAllBookingsByUserId`, {
             method: 'POST',
             headers: {
-                'Authorization': `Bearer ${token}`,
+                'Authorization': `Bearer ${auth.token}`,
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({userId})
+            body: JSON.stringify({ userId: auth.user.id })
         })
             .then(response => {
                 if (!response.ok) {
@@ -27,13 +25,15 @@ function BookingHistoryComponent() {
             })
             .then(data => {
                 setBookingHistory(data);
-                setIsLoading(false);
             })
             .catch(error => {
                 setError(error.message);
+            })
+            .finally(() => {
                 setIsLoading(false);
             });
-    }, [auth.user.id, auth.token]); // Add dependencies to the useEffect hook
+    }, [auth.user.id, auth.token]); // Ensure these are the correct dependencies
+
 
     if (isLoading) return <div>Loading...</div>;
     if (error) return <div>Error: {error}</div>;
