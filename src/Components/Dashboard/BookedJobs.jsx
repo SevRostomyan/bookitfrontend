@@ -38,6 +38,30 @@ const BookedJobs = () => {
         fetchBookedJobs();
     }, [auth.token, auth.user.id]);
 
+    const startCleaning = async (cleaningId) => {
+        try {
+            const response = await fetch(`http://localhost:7878/api/städare/startCleaning`, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `Bearer ${auth.token}`,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ cleaningId }),
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to start cleaning');
+            }
+
+            // Optionally refresh the booked jobs list or handle the UI update
+            alert('Cleaning started successfully');
+            fetchBookedJobs(); // Refresh the list to reflect the change
+        } catch (error) {
+            console.error('Error:', error);
+            alert('Error starting cleaning: ' + error.message);
+        }
+    };
+
     if (isLoading) return <div>Loading...</div>;
     if (error) return <div>Error: {error}</div>;
 
@@ -54,6 +78,7 @@ const BookedJobs = () => {
                         <th>Tjänst</th>
                         <th>Bokningstid</th>
                         <th>Status</th>
+                        <th>Action</th> {/* Added column header for actions */}
                     </tr>
                     </thead>
                     <tbody>
@@ -65,6 +90,9 @@ const BookedJobs = () => {
                             <td>{job.tjänst}</td>
                             <td>{job.bookingTime}</td>
                             <td>{job.status}</td>
+                            <td>
+                                <button onClick={() => startCleaning(job.id)}>Start</button> {/* Added Start button */}
+                            </td>
                         </tr>
                     ))}
                     </tbody>
