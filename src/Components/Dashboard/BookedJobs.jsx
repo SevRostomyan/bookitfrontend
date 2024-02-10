@@ -19,7 +19,6 @@ const BookedJobs = () => {
                         'Authorization': `Bearer ${auth.token}`,
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({ userId: auth.user.id }),
                 });
 
                 if (!response.ok) {
@@ -36,31 +35,7 @@ const BookedJobs = () => {
         };
 
         fetchBookedJobs();
-    }, [auth.token, auth.user.id]);
-
-    const startCleaning = async (cleaningId) => {
-        try {
-            const response = await fetch(`http://localhost:7878/api/städare/startCleaning`, {
-                method: 'PUT',
-                headers: {
-                    'Authorization': `Bearer ${auth.token}`,
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ cleaningId }),
-            });
-
-            if (!response.ok) {
-                throw new Error('Failed to start cleaning');
-            }
-
-            // Optionally refresh the booked jobs list or handle the UI update
-            alert('Cleaning started successfully');
-            fetchBookedJobs(); // Refresh the list to reflect the change
-        } catch (error) {
-            console.error('Error:', error);
-            alert('Error starting cleaning: ' + error.message);
-        }
-    };
+    }, [auth.token]);
 
     if (isLoading) return <div>Loading...</div>;
     if (error) return <div>Error: {error}</div>;
@@ -77,23 +52,33 @@ const BookedJobs = () => {
                         <th>Städare</th>
                         <th>Tjänst</th>
                         <th>Bokningstid</th>
+                        <th>Sluttid</th>
+                        <th>Adress</th>
+                        <th>Meddelande vid bokning</th>
+                        <th>Rapporterad tid</th>
+                        <th>Kundfeedback</th>
                         <th>Status</th>
-                        <th>Action</th> {/* Added column header for actions */}
+                        <th>Rapportstatus</th>
                     </tr>
                     </thead>
                     <tbody>
-                    {bookedJobs.map((job) => (
-                        <tr key={job.id}>
-                            <td>{job.id}</td>
-                            <td>{job.kund.firstname} {job.kund.lastname}</td>
-                            <td>{job.städare ? `${job.städare.firstname} ${job.städare.lastname}` : 'Ej tilldelad'}</td>
-                            <td>{job.tjänst}</td>
-                            <td>{job.bookingTime}</td>
-                            <td>{job.status}</td>
-                            <td>
-                                <button onClick={() => startCleaning(job.id)}>Start</button> {/* Added Start button */}
-                            </td>
-                        </tr>
+                    {bookedJobs.map(booking => (
+                        booking && (
+                            <tr key={booking.id}>
+                                <td>{booking.id}</td>
+                                <td>{booking.kund?.firstname} {booking.kund?.lastname}</td>
+                                <td>{booking.städare?.firstname} {booking.städare?.lastname}</td>
+                                <td>{booking.tjänst}</td>
+                                <td>{booking.bookingTime}</td>
+                                <td>{booking.endTime}</td>
+                                <td>{booking.adress}</td>
+                                <td>{booking.messageAtBooking}</td>
+                                <td>{booking.cleaningReportedTime}</td>
+                                <td>{booking.customerFeedback}</td>
+                                <td>{booking.status}</td>
+                                <td>{booking.cleaningReportStatus}</td>
+                            </tr>
+                        )
                     ))}
                     </tbody>
                 </table>
