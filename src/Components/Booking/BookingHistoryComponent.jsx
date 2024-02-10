@@ -5,17 +5,17 @@ function BookingHistoryComponent() {
     const [bookingHistory, setBookingHistory] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
-    const {auth} = useAuth();
+    const { auth } = useAuth();
 
     useEffect(() => {
         setIsLoading(true);
         fetch(`http://localhost:7878/api/bokning/getAllBookingsByUserId`, {
             method: 'POST',
             headers: {
-                'Authorization': `Bearer ${auth.token}`,
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${auth.token}`
+
             },
-            body: JSON.stringify({ userId: auth.user.id })
         })
             .then(response => {
                 if (!response.ok) {
@@ -24,19 +24,24 @@ function BookingHistoryComponent() {
                 return response.json();
             })
             .then(data => {
+                if (!Array.isArray(data)) {
+                    throw new Error('Data is not an array');
+                }
+                console.log(data);
                 setBookingHistory(data);
             })
             .catch(error => {
+                console.error('Fetch error:', error);
                 setError(error.message);
             })
             .finally(() => {
                 setIsLoading(false);
             });
-    }, [auth.user.id, auth.token]); // Ensure these are the correct dependencies
-
+    }, [auth.token]);
 
     if (isLoading) return <div>Loading...</div>;
     if (error) return <div>Error: {error}</div>;
+    if (bookingHistory.length === 0) return <div>Inga bokningar hittades.</div>;
 
     return (
         <div>
@@ -60,10 +65,11 @@ function BookingHistoryComponent() {
                 </thead>
                 <tbody>
                 {bookingHistory.map(booking => (
+                    booking && (
                     <tr key={booking.id}>
                         <td>{booking.id}</td>
-                        <td>{booking.kund.firstname} {booking.kund.lastname}</td>
-                        <td>{booking.städare.firstname} {booking.städare.lastname}</td>
+                        <td>{booking.kund?.firstname} {booking.kund?.lastname}</td>
+                        <td>{booking.städare?.firstname} {booking.städare?.lastname}</td>
                         <td>{booking.tjänst}</td>
                         <td>{booking.bookingTime}</td>
                         <td>{booking.endTime}</td>
@@ -74,12 +80,12 @@ function BookingHistoryComponent() {
                         <td>{booking.status}</td>
                         <td>{booking.cleaningReportStatus}</td>
                     </tr>
+                    )
                 ))}
                 </tbody>
             </table>
         </div>
     );
-
 }
 
 export default BookingHistoryComponent;

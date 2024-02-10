@@ -35,30 +35,9 @@ const CustomerDashboard = () => {
                 });
         };
 
-        const handleHistoryClick = () => {
-            const apiUrl = '/api/bokning/fetchAllBookings';
-
-            fetch(apiUrl, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    // Headers
-                },
-            })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Något gick fel vid hämtning av data.');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    // Logga
-                    console.log(data);
-                })
-                .catch(error => {
-                    console.error('Fetch error:', error);
-                });
-        };
+    const handleHistoryClick = () => {
+        navigate('/history');
+    };
 
         const handlePaymentMethodsClick = () => {
             const apiUrl = '/api/betalning'; // <<Uppdatera med korrekt specifik endpoint>>
@@ -84,6 +63,7 @@ const CustomerDashboard = () => {
                     console.error('Fetch error:', error);
                 });
         };
+
 
     return (
         <div className="dashboard">
