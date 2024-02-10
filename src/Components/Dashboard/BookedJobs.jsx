@@ -22,7 +22,6 @@ const BookedJobs = () => {
                     'Authorization': `Bearer ${auth.token}`,
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ userId: auth.user.id }),
             });
 
             if (!response.ok) {
