@@ -13,6 +13,8 @@ import EmployeeDashboard from "./Components/Dashboard/EmployeeDashboard";
 import CustomerDashboard from "./Components/Dashboard/CustomerDashboard";
 import PerformedCleaningComponent from "./Components/Booking/PerformedCleaningComponent";
 import BookingAdminPanel from "./Components/Admin/BookingAdminPanel";
+import BookedJobs from "./Components/Dashboard/BookedJobs";
+
 
 function App() {
     return (
@@ -30,6 +32,7 @@ function App() {
                     <Route path="/booking-admin-panel" element={<BookingAdminPanel />} />
                     <Route path="/employee-dashboard" element={<EmployeeDashboard />} />
                     <Route path="/customer-dashboard" element={<CustomerDashboard />} />
+                    <Route path="/booked-jobs" element={<BookedJobs />} />
                 </Routes>
             </main>
         </div>

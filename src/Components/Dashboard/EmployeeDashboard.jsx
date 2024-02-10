@@ -6,8 +6,7 @@ const EmployeeDashboard = () => {
     const navigate = useNavigate();
 
     const handleInbokadeJobbClick = () => {
-        // Placeholder for your logic to handle "INBOKADE JOBB" click
-        console.log('INBOKADE JOBB clicked');
+        navigate('/booked-jobs');
     };
 
     const handleHistorikClick = () => {
