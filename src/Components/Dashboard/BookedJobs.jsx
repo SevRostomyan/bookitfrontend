@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useAuth } from "../../AuthContext";
 
 const BookedJobs = () => {
@@ -14,13 +14,7 @@ const BookedJobs = () => {
     const [errorInProgress, setErrorInProgress] = useState('');
     const { auth } = useAuth();
 
-    useEffect(() => {
-        fetchJobs('fetchNotStartedBookingsByUserId', setNotStartedJobs, setIsLoadingNotStarted, setErrorNotStarted);
-        fetchJobs('fetchInProgressBookingsByUserId', setInProgressJobs, setIsLoadingInProgress, setErrorInProgress);
-        fetchJobs('fetchReportedCompletedBookingsByUserId', setReportedCompletedJobs, setIsLoadingReportedCompleted, setErrorReportedCompleted);
-    }, []);
-
-    const fetchJobs = async (endpoint, setState, setIsLoading, setError) => {
+    const fetchJobs = useCallback(async (endpoint, setState, setIsLoading, setError) => {
         setIsLoading(true);
         setError('');
 
@@ -34,7 +28,6 @@ const BookedJobs = () => {
             });
 
             if (response.status === 204) {
-                // Handle 204 No Content response
                 setState([]);
                 return;
             }
@@ -50,7 +43,13 @@ const BookedJobs = () => {
         } finally {
             setIsLoading(false);
         }
-    };
+    }, [auth.token]); // Dependencies of fetchJobs
+
+    useEffect(() => {
+        fetchJobs('fetchNotStartedBookingsByUserId', setNotStartedJobs, setIsLoadingNotStarted, setErrorNotStarted);
+        fetchJobs('fetchInProgressBookingsByUserId', setInProgressJobs, setIsLoadingInProgress, setErrorInProgress);
+        fetchJobs('fetchReportedCompletedBookingsByUserId', setReportedCompletedJobs, setIsLoadingReportedCompleted, setErrorReportedCompleted);
+    }, [fetchJobs]);  // fetchJobs is now a dependency
 
 
     const startCleaning = async (cleaningId) => {
@@ -101,11 +100,7 @@ const BookedJobs = () => {
         }
     };
 
-    const renderNotStartedJobsTable = () => {
-        return renderJobsTable("Not Started Jobs", notStartedJobs, startCleaning, 'Starta');
-    };
-
-    const renderJobsTable = (title, jobs, actionHandler, actionButtonText, isLoading, error, noDataMessage) => {
+       const renderJobsTable = (title, jobs, actionHandler, actionButtonText, isLoading, error, noDataMessage) => {
         if (isLoading) {
             return <div>Loading...</div>;
         }
@@ -162,7 +157,7 @@ const BookedJobs = () => {
             {renderJobsTable("", notStartedJobs, startCleaning, 'Starta', isLoadingNotStarted, errorNotStarted, "Det finns inga ej påbörjade uppdrag just nu.")}
             <h2>Påbörjade uppdrag</h2>
             {renderJobsTable("", inProgressJobs, finishCleaning, 'Avsluta', isLoadingInProgress, errorInProgress, "Det finns inga påbörjade uppdrag just nu.")}
-            <h2>Avslutade uppdrag</h2>
+            <h2>Avslutade uppdrag i väntan på återkoppling från kund</h2>
             {renderJobsTable("", reportedCompletedJobs, null, '', isLoadingReportedCompleted, errorReportedCompleted, "Det finns inga avslutade uppdrag just nu.")}
         </div>
     );

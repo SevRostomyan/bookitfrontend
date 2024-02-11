@@ -170,6 +170,10 @@ export default function Navbar() {
                         </li>
                     )}
 
+                    {auth.token && auth.role === 'STÄDARE' && (
+                        <li><Link to="/history" className="button button-link">Historik</Link></li>
+                    )}
+
                 </ul>
                 <ul className="flex gap-4">
                     {!auth.token && (

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 import { useAuth } from "../../AuthContext";
 
 function BookingManagement() {
@@ -7,11 +7,7 @@ function BookingManagement() {
     const [availableCleaners, setAvailableCleaners] = useState([]);
     const {auth} = useAuth();
 
-    useEffect(() => {
-        fetchNotAssignedBookings();
-    }, []);
-
-    const fetchNotAssignedBookings = async () => {
+    const fetchNotAssignedBookings = useCallback(async () => {
         try {
             const token = auth.token;
             const response = await fetch('http://localhost:7878/api/admin/fetchNotAssignedBookings', {
@@ -28,7 +24,14 @@ function BookingManagement() {
         } catch (error) {
             console.error('Error:', error);
         }
-    };
+    },[auth.token]);
+
+
+    useEffect(() => {
+        fetchNotAssignedBookings().then(r =>{} );
+    }, [fetchNotAssignedBookings]);
+
+
 
     const fetchAvailableCleaners = async (bookingTime) => {
         try {
@@ -74,12 +77,12 @@ function BookingManagement() {
 
     const handleSelectBooking = (booking) => {
         setSelectedBooking(booking);
-        fetchAvailableCleaners(booking.bookingTime);
+        fetchAvailableCleaners(booking.bookingTime).then(r =>{} );
     };
 
     const handleAssignCleaning = (cleanerId) => {
         if (selectedBooking) {
-            assignCleaning(selectedBooking.id, cleanerId);
+            assignCleaning(selectedBooking.id, cleanerId).then(r => {});
         }
     };
 
