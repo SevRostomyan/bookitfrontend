@@ -1,0 +1,50 @@
+/* TimeoutPopupComponent Styling */
+.timeout-popup {
+    position: absolute;
+    top: 20%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 100;
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.timeout-popup h2 {
+    margin: 0;
+    color: #333;
+    font-size: 1.5em;
+}
+
+.timeout-popup p {
+    color: #666;
+    font-size: 1em;
+}
+
+.timeout-popup button {
+    padding: 10px 20px;
+    margin: 10px;
+    background-color: #0056b3;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.3s;
+}
+
+.timeout-popup button:hover {
+    background-color: #007bff;
+}
+
+/* Responsiv design */
+@media (max-width: 768px) {
+    .timeout-popup {
+        width: 90%;
+        left: 5%; /* Center the popup on smaller screens */
+        top: 10%;
+        transform: translateY(-10%);
+    }
+}
