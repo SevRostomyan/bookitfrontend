@@ -13,6 +13,11 @@ const CustomerDashboard = () => {
     }
 
     const handleMyBookingsClick = () => {
+        if (!auth || !auth.user || !auth.user.id) {
+            console.error('Auth user is not defined');
+            return;
+        }
+
         const apiUrl = 'http://localhost:7878/api/bokning/fetchBookingsByUserId';
         fetch(apiUrl, {
             method: 'POST',
@@ -29,26 +34,13 @@ const CustomerDashboard = () => {
                 return response.json();
             })
             .then(data => {
-                data.forEach(booking => {
-                    console.log(`Booking ID: ${booking.id}`);
-                    console.log(`Customer: ${booking.kund.firstname} ${booking.kund.lastname}, Email: ${booking.kund.email}`);
-                    console.log(`Cleaner: ${booking.städare.firstname} ${booking.städare.lastname}, Email: ${booking.städare.email}`);
-                    console.log(`Service: ${booking.tjänst}`);
-                    console.log(`Booking Time: ${booking.bookingTime}`);
-                    console.log(`End Time: ${booking.endTime}`);
-                    console.log(`Address: ${booking.adress}`);
-                    console.log(`Message At Booking: ${booking.messageAtBooking}`);
-                    console.log(`Cleaning Reported Time: ${booking.cleaningReportedTime}`);
-                    console.log(`Customer Feedback: ${booking.customerFeedback}`);
-                    console.log(`Status: ${booking.status}`);
-                    console.log(`Cleaning Report Status: ${booking.cleaningReportStatus}`);
-                    console.log('------------------------------------');
-                });
+                console.log(data);
             })
             .catch(error => {
                 console.error('Error fetching bookings:', error);
             });
     };
+
 
     const handleHistoryClick = () => {
         navigate('/history');
