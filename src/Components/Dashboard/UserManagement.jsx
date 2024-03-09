@@ -79,7 +79,7 @@ function UserManagement() {
         }
     };
 
-    const handleGenerateInvoice = async (userId) => {
+    const handleGenerateInvoice = async (user) => {
         try {
             const token = auth.token;
             const response = await fetch('http://localhost:7878/api/admin/generateInvoices', {
@@ -88,17 +88,18 @@ function UserManagement() {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ kundId: userId }),
+                body: JSON.stringify({ kundId: user.id }),
             });
             if (!response.ok) {
                 throw new Error('Failed to generate invoice');
             }
-            alert('Invoice generated successfully for user ID: ' + userId);
+            alert(`Invoice generated successfully for ${user.firstname} ${user.lastname}.`);
         } catch (error) {
             console.error('Error generating invoice:', error);
             alert('Failed to generate invoice');
         }
     };
+
 
     const renderUserTable = (users, userType) => (
         <div>
@@ -119,9 +120,11 @@ function UserManagement() {
                         <td>{user.firstname} {user.lastname}</td>
                         <td>{user.email}</td>
                         <td>
-                            <button onClick={() => handleDeleteUser(user.id, userType)}>Ta bort</button>
-                            <button onClick={() => handleUpdateUser(user)}>Uppdatera</button>
-                            {userType === 'customers' && <button onClick={() => handleGenerateInvoice(user.id)}>Fakturera</button>}
+                            <div style={{ display: 'flex', justifyContent: 'space-evenly' }}>
+                                <button onClick={() => handleDeleteUser(user.id, userType === 'customers' ? 'kund' : 'städare')} style={{ marginRight: '10px' }}>Ta bort</button>
+                                <button onClick={() => handleUpdateUser(user)} style={{ marginRight: '10px' }}>Uppdatera</button>
+                                {userType === 'customers' && <button onClick={() => handleGenerateInvoice(user)}>Fakturera</button>}
+                            </div>
                         </td>
                     </tr>
                 ))}
@@ -129,6 +132,7 @@ function UserManagement() {
             </table>
         </div>
     );
+
 
     return (
         <div>
