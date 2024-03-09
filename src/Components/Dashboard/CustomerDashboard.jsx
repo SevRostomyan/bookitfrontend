@@ -1,6 +1,8 @@
 import React from 'react';
 import '../../assets/Dashboard.css';
 import {useNavigate} from "react-router-dom";
+import {useAuth} from "../../AuthContext";
+const { auth } = useAuth();
 
 const CustomerDashboard = () => {
     const navigate = useNavigate();
@@ -17,8 +19,8 @@ const CustomerDashboard = () => {
             fetch(apiUrl, {
                 method: 'POST',
                 headers: {
+                    'Authorization': `Bearer ${auth.token}`,
                     'Content-Type': 'application/json',
-                    // Headers
                 },
             })
                 .then(response => {
@@ -46,8 +48,9 @@ const CustomerDashboard = () => {
             fetch(apiUrl, {
                 method: 'GET', // Anpassa till backend
                 headers: {
+                    'Authorization': `Bearer ${auth.token}`,
                     'Content-Type': 'application/json',
-                    // Andra headers
+
                 },
             })
                 .then(response => {
