@@ -13,24 +13,19 @@ function UserManagement() {
         refreshUsers();
     }, []);
 
-    const refreshUsers = () => {
-        fetchUsers('städare/all', setCleaners);
-        fetchUsers('kunder/all', setCustomers);
+    const refreshUsers = async () => {
+        await fetchUsers('städare/all', setCleaners);
+        await fetchUsers('kunder/all', setCustomers);
     };
 
     const fetchUsers = async (endpoint, setUserList) => {
         try {
             const token = auth.token;
-
             const response = await fetch(`http://localhost:7878/api/admin/${endpoint}`, {
                 method: 'GET',
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
+                headers: { 'Authorization': `Bearer ${token}` }
             });
-            if (!response.ok) {
-                throw new Error('Failed to fetch users');
-            }
+            if (!response.ok) throw new Error('Failed to fetch users');
             const data = await response.json();
             setUserList(data);
         } catch (error) {
@@ -84,7 +79,7 @@ function UserManagement() {
         }
     };
 
-    const handleGenerateInvoice = async (userId) => {
+    const handleGenerateInvoice = async (user) => {
         try {
             const token = auth.token;
             const response = await fetch('http://localhost:7878/api/admin/generateInvoices', {
@@ -93,34 +88,22 @@ function UserManagement() {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ kundId: userId }),
+                body: JSON.stringify({ kundId: user.id }),
             });
             if (!response.ok) {
                 throw new Error('Failed to generate invoice');
             }
-            alert('Invoice generated successfully for user ID: ' + userId);
+            alert(`Invoice generated successfully for ${user.firstname} ${user.lastname}.`);
         } catch (error) {
             console.error('Error generating invoice:', error);
             alert('Failed to generate invoice');
         }
     };
 
-    const renderUserRows = (users) => users.map(user => (
-        <tr key={user.id}>
-            <td>{user.id}</td>
-            <td>{user.firstname} {user.lastname}</td>
-            <td>{user.email}</td>
-            <td>
-                <button onClick={() => handleDeleteUser(user.id)}>Ta bort</button>
-                <button onClick={() => handleUpdateUser(user)}>Uppdatera</button>
-                <button onClick={() => handleGenerateInvoice(user.id)}>Fakturera</button>
-            </td>
-        </tr>
-    ));
 
-    return (
+    const renderUserTable = (users, userType) => (
         <div>
-            <h2>Användarhantering</h2>
+            <h3>{userType === 'customers' ? 'Kunder' : 'Städare'}</h3>
             <table>
                 <thead>
                 <tr>
@@ -131,9 +114,31 @@ function UserManagement() {
                 </tr>
                 </thead>
                 <tbody>
-                {renderUserRows([...cleaners, ...customers])}
+                {users.map(user => (
+                    <tr key={user.id}>
+                        <td>{user.id}</td>
+                        <td>{user.firstname} {user.lastname}</td>
+                        <td>{user.email}</td>
+                        <td>
+                            <div style={{ display: 'flex', justifyContent: 'space-evenly' }}>
+                                <button onClick={() => handleDeleteUser(user.id, userType === 'customers' ? 'kund' : 'städare')} style={{ marginRight: '10px' }}>Ta bort</button>
+                                <button onClick={() => handleUpdateUser(user)} style={{ marginRight: '10px' }}>Uppdatera</button>
+                                {userType === 'customers' && <button onClick={() => handleGenerateInvoice(user)}>Fakturera</button>}
+                            </div>
+                        </td>
+                    </tr>
+                ))}
                 </tbody>
             </table>
+        </div>
+    );
+
+
+    return (
+        <div>
+            <h2>Användarhantering</h2>
+            {renderUserTable(customers, 'customers')}
+            {renderUserTable(cleaners, 'cleaners')}
             {showModal && <UpdateUserModal user={selectedUser} onClose={() => setShowModal(false)} onUpdate={onUpdateUser} />}
         </div>
     );
