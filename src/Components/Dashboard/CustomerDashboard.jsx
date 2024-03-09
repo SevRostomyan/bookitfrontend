@@ -1,6 +1,7 @@
 import React from 'react';
 import '../../assets/Dashboard.css';
 import {useNavigate} from "react-router-dom";
+import UploadPdf  from './UploadPdf';
 
 const CustomerDashboard = () => {
     const navigate = useNavigate();
@@ -41,13 +42,13 @@ const CustomerDashboard = () => {
     };
 
         const handlePaymentMethodsClick = () => {
-            const apiUrl = '/api/betalning'; // <<Uppdatera med korrekt specifik endpoint>>
+            const apiUrl = '/api/betalning'; 
 
             fetch(apiUrl, {
-                method: 'GET', // Anpassa till backend
+                method: 'GET', 
                 headers: {
                     'Content-Type': 'application/json',
-                    // Andra headers
+                
                 },
             })
                 .then(response => {
@@ -77,6 +78,7 @@ const CustomerDashboard = () => {
                 <button className="dashboard-button" onClick={handleHistoryClick}>HISTORIK</button>
                 <button className="dashboard-button" onClick={handlePaymentMethodsClick}>BETALNINGSMETODER</button>
             </div>
+            <UploadPdf />
         </div>
     );
 };
