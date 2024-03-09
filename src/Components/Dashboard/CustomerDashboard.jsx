@@ -2,42 +2,41 @@ import React from 'react';
 import '../../assets/Dashboard.css';
 import {useNavigate} from "react-router-dom";
 import UploadPdf  from './UploadPdf';
+import {useAuth} from "../../AuthContext";
 
 const CustomerDashboard = () => {
     const navigate = useNavigate();
-
+    const { auth } = useAuth();
 
     const handleNewBookingClick = () => {
-        // Navigate to the Booking component where booking-form,BookedClean and CleaningApproval components are also located to handle bookings
         navigate('/booking');
-
     }
 
-        const handleMyBookingsClick = () => {
-            const apiUrl = '/api/bokning/fetchBookingsByUserId';
-            fetch(apiUrl, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    // Headers
-                },
+    const handleMyBookingsClick = () => {
+        const apiUrl = 'http://localhost:7878/api/bokning/fetchBookingsByUserId';
+        fetch(apiUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${auth.token}`,
+            },
+            body: JSON.stringify({ userId: auth.user.id }),
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to fetch bookings');
+                }
+                return response.json();
             })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Något gick fel vid hämtning av data.');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    // Logga
-                    console.log(data);
-                })
-                .catch(error => {
-                    console.error('Fetch error:', error);
-                });
-        };
+            .then(data => {
+                console.log(data);
+            })
+            .catch(error => {
+                console.error('Error fetching bookings:', error);
+            });
+    };
 
-    const handleHistoryClick = () => {
+    /*const handleHistoryClick = () => {
         navigate('/history');
     };
 
@@ -64,7 +63,7 @@ const CustomerDashboard = () => {
                 .catch(error => {
                     console.error('Fetch error:', error);
                 });
-        };
+        };*/
 
 
     return (
