@@ -36,7 +36,7 @@ const CustomerDashboard = () => {
             });
     };
 
-    /*const handleHistoryClick = () => {
+    const handleHistoryClick = () => {
         navigate('/history');
     };
 
@@ -63,7 +63,7 @@ const CustomerDashboard = () => {
                 .catch(error => {
                     console.error('Fetch error:', error);
                 });
-        };*/
+        };
 
 
     return (

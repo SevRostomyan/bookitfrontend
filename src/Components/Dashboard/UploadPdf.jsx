@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import { useAuth } from "../../AuthContext";
 
 const UploadPdf = () => {
+  const { auth } = useAuth();
   const [invoices, setInvoices] = useState([]);
 
   useEffect(() => {
@@ -12,10 +14,10 @@ const UploadPdf = () => {
       const response = await fetch('http://localhost:7878/api/customer/invoices', {
         method: 'POST',
         headers: {
-          'Authorization': 'Bearer <JWT>' 
+          'Authorization': `Bearer ${auth.token}`,
+          'Content-Type': 'application/json',
         }
       });
-
       if (response.ok) {
         const data = await response.json();
         setInvoices(data);
@@ -32,6 +34,7 @@ const UploadPdf = () => {
       const response = await fetch('http://localhost:7878/api/admin/invoices/download', {
         method: 'POST',
         headers: {
+          'Authorization': `Bearer ${auth.token}`,
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
