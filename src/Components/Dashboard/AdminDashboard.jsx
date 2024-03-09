@@ -5,13 +5,11 @@ import BookingManagement from './BookingManagement';
 import PaymentManagement from './PaymentManagement';
 import RegisterUserForm from './RegisterUserForm';
 import UserManagement from './UserManagement';
-import GenerateInvoices from '../Admin/GenerateInvoices';
-
 
 function AdminDashboard() {
     const navigate = useNavigate();
 
-
+    // Navigeringsfunktion
     const navigateTo = (path) => {
         navigate(path);
     };
@@ -24,10 +22,8 @@ function AdminDashboard() {
                 <button className="dashboard-button" onClick={() => navigateTo('bookings')}>Bokningar</button>
                 <button className="dashboard-button" onClick={() => navigateTo('payments')}>Betalningar</button>
                 <button className="dashboard-button" onClick={() => navigateTo('register')}>Registrera Användare</button>
-                <button className="dashboard-button" onClick={() => navigateTo('generate-invoices')}>Generate Invoices</button>
             </div>
             <Routes>
-                <Route path="generate-invoices" element={<GenerateInvoices />} />
                 <Route path="user-management" element={<UserManagement />} />
                 <Route path="bookings" element={<BookingManagement />} />
                 <Route path="payments" element={<PaymentManagement />} />
@@ -36,5 +32,6 @@ function AdminDashboard() {
         </div>
     );
 }
+
 export default AdminDashboard;
 
