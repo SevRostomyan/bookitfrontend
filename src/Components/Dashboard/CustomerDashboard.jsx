@@ -13,13 +13,7 @@ const CustomerDashboard = () => {
     }
 
     const handleMyBookingsClick = () => {
-        if (!auth || !auth.user || !auth.user.id) {
-            console.error('Auth user is not defined');
-            return;
-        }
-
-        const apiUrl = 'http://localhost:7878/api/bokning/fetchBookingsByUserId';
-        fetch(apiUrl, {
+        fetch('http://localhost:7878/api/bokning/fetchBookingsByUserId', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -34,12 +28,16 @@ const CustomerDashboard = () => {
                 return response.json();
             })
             .then(data => {
+                if (!Array.isArray(data)) {
+                    throw new Error('Data is not an array');
+                }
                 console.log(data);
             })
             .catch(error => {
                 console.error('Error fetching bookings:', error);
-            });
+            })
     };
+
 
 
     const handleHistoryClick = () => {
@@ -52,7 +50,6 @@ const CustomerDashboard = () => {
                 method: 'GET', 
                 headers: {
                     'Content-Type': 'application/json',
-                
                 },
             })
                 .then(response => {
