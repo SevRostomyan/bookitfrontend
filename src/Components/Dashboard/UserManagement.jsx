@@ -111,9 +111,11 @@ function UserManagement() {
             <td>{user.firstname} {user.lastname}</td>
             <td>{user.email}</td>
             <td>
-                <button onClick={() => handleDeleteUser(user.id)}>Ta bort</button>
-                <button onClick={() => handleUpdateUser(user)}>Uppdatera</button>
-                <button onClick={() => handleGenerateInvoice(user.id)}>Fakturera</button>
+                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <button onClick={() => handleDeleteUser(user.id)} style={{ marginRight: '10px' }}>Ta bort</button>
+                    <button onClick={() => handleUpdateUser(user)} style={{ marginRight: '10px' }}>Uppdatera</button>
+                    <button onClick={() => handleGenerateInvoice(user.id)}>Fakturera</button>
+                </div>
             </td>
         </tr>
     ));
