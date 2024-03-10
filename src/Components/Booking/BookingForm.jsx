@@ -4,7 +4,6 @@ import {useAuth} from "../../AuthContext";
 import {useNavigate} from "react-router-dom";
 
 
-
 const BookingForm = () => {
     const [showPopup, setShowPopup] = useState(false);
     const {auth} = useAuth(); // Use the useAuth hook to access the auth state
@@ -176,7 +175,7 @@ const BookingForm = () => {
                         />
                     </div>
 
-                  <button type="submit">Boka</button>
+                    <button type="submit">Boka</button>
                 </form>
             </div>
         </div>

@@ -1,13 +1,31 @@
 /* bookings.css */
 
 .bookings {
-    max-width: 600px;
+    width: auto;
+    max-width: 100%;
     margin: 0 auto;
     padding: 20px;
     border: 1px solid #ccc;
     border-radius: 5px;
     background-color: #f9f9f9;
     text-align: center;
+}
+
+.bookings table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+
+.bookings th, .bookings td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+.bookings th {
+    background-color: #f2f2f2;
+    color: #333; /* Ändra färgen här */
 }
 
 h1 {

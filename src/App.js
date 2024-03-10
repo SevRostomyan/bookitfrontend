@@ -14,6 +14,8 @@ import CustomerDashboard from "./Components/Dashboard/CustomerDashboard";
 import PerformedCleaningComponent from "./Components/Booking/PerformedCleaningComponent";
 import BookingAdminPanel from "./Components/Admin/BookingAdminPanel";
 import BookedJobs from "./Components/Dashboard/BookedJobs";
+import MinaAktuellaBokningar from "./Components/Dashboard/MinaAktuellaBokningar";
+import DownloadPdf from './Components/Dashboard//DownloadPdf';
 
 
 function App() {
@@ -32,6 +34,8 @@ function App() {
                     <Route path="/booking-admin-panel" element={<BookingAdminPanel />} />
                     <Route path="/employee-dashboard" element={<EmployeeDashboard />} />
                     <Route path="/customer-dashboard" element={<CustomerDashboard />} />
+                    <Route path="/mina-aktuella-bokningar" element={<MinaAktuellaBokningar />} />
+                    <Route path="/mina-fakturor" element={<DownloadPdf/>} />
                     <Route path="/booked-jobs" element={<BookedJobs />} />
                 </Routes>
             </main>

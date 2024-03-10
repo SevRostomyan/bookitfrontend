@@ -13,7 +13,7 @@ class Booking extends Component {
         const { fetchReportedCompletedBookings } = this.props; // Accessed via props
 
         const cleaningData = {
-            date: '2023-11-01',
+            date: '2024-03-09',
             time: '10:00 AM'
         };
 

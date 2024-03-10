@@ -10,7 +10,7 @@ function UserManagement() {
     const { auth } = useAuth();
 
     useEffect(() => {
-        refreshUsers();
+        refreshUsers().then(r => {});
     }, []);
 
     const refreshUsers = async () => {

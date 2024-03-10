@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useAuth } from "../../AuthContext";
+import '../../assets/BookedClean.css';
 
 const BookedJobs = () => {
     const [notStartedJobs, setNotStartedJobs] = useState([]);
@@ -12,7 +13,7 @@ const BookedJobs = () => {
     const [isLoadingInProgress, setIsLoadingInProgress] = useState(false);
     const [errorNotStarted, setErrorNotStarted] = useState('');
     const [errorInProgress, setErrorInProgress] = useState('');
-    const { auth } = useAuth();
+    const {auth} = useAuth();
 
     const fetchJobs = useCallback(async (endpoint, setState, setIsLoading, setError) => {
         setIsLoading(true);
@@ -60,7 +61,7 @@ const BookedJobs = () => {
                     'Authorization': `Bearer ${auth.token}`,
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ cleaningId }),
+                body: JSON.stringify({cleaningId}),
             });
 
             if (!response.ok) {
@@ -68,8 +69,10 @@ const BookedJobs = () => {
             }
 
             alert('Cleaning started successfully');
+            // Uppdatera alla relevanta jobblistor
             fetchJobs('fetchNotStartedBookingsByUserId', setNotStartedJobs, setIsLoadingNotStarted, setErrorNotStarted);
             fetchJobs('fetchInProgressBookingsByUserId', setInProgressJobs, setIsLoadingInProgress, setErrorInProgress);
+            fetchJobs('fetchReportedCompletedBookingsByUserId', setReportedCompletedJobs, setIsLoadingReportedCompleted, setErrorReportedCompleted);
         } catch (error) {
             console.error('Error:', error);
             alert('Failed to start cleaning');
@@ -84,7 +87,7 @@ const BookedJobs = () => {
                     'Authorization': `Bearer ${auth.token}`,
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ cleaningId }),
+                body: JSON.stringify({cleaningId}),
             });
 
             if (!response.ok) {
@@ -92,15 +95,17 @@ const BookedJobs = () => {
             }
 
             alert('Cleaning reported as completed successfully');
+            // Uppdatera alla relevanta jobblistor
             fetchJobs('fetchNotStartedBookingsByUserId', setNotStartedJobs, setIsLoadingNotStarted, setErrorNotStarted);
             fetchJobs('fetchInProgressBookingsByUserId', setInProgressJobs, setIsLoadingInProgress, setErrorInProgress);
+            fetchJobs('fetchReportedCompletedBookingsByUserId', setReportedCompletedJobs, setIsLoadingReportedCompleted, setErrorReportedCompleted);
         } catch (error) {
             console.error('Error:', error);
             alert('Failed to report cleaning as completed');
         }
     };
 
-       const renderJobsTable = (title, jobs, actionHandler, actionButtonText, isLoading, error, noDataMessage) => {
+    const renderJobsTable = (title, jobs, actionHandler, actionButtonText, isLoading, error, noDataMessage) => {
         if (isLoading) {
             return <div>Loading...</div>;
         }
@@ -112,14 +117,14 @@ const BookedJobs = () => {
         }
 
         return (
-            <>
+            <div className="bookings">
                 <h3>{title}</h3>
                 <table>
                     <thead>
                     <tr>
                         <th>ID</th>
                         <th>Kund</th>
-                        <th>Bokningsdress</th>
+                        <th>Bokningsadress</th>
                         <th>Tjänst</th>
                         <th>Bokningstid</th>
                         <th>Kundmeddelande</th>
@@ -139,28 +144,35 @@ const BookedJobs = () => {
                             <td>{job.status}</td>
                             {title !== "Reported Completed Jobs" && (
                                 <td>
-                                    {actionHandler && <button onClick={() => actionHandler(job.id)}>{actionButtonText}</button>}
+                                    {actionHandler &&
+                                        <button onClick={() => actionHandler(job.id)}>{actionButtonText}</button>}
                                 </td>
                             )}
                         </tr>
                     ))}
                     </tbody>
                 </table>
-            </>
+            </div>
         );
-    };
+    }
 
 
     return (
         <div>
             <h2>Inbokade Jobb</h2>
-            {renderJobsTable("", notStartedJobs, startCleaning, 'Starta', isLoadingNotStarted, errorNotStarted, "Det finns inga ej påbörjade uppdrag just nu.")}
+            <div className="bookings">
+                {renderJobsTable("", notStartedJobs, startCleaning, 'Starta', isLoadingNotStarted, errorNotStarted, "Det finns inga ej påbörjade uppdrag just nu.")}
+            </div>
             <h2>Påbörjade uppdrag</h2>
-            {renderJobsTable("", inProgressJobs, finishCleaning, 'Avsluta', isLoadingInProgress, errorInProgress, "Det finns inga påbörjade uppdrag just nu.")}
+            <div className="bookings">
+                {renderJobsTable("", inProgressJobs, finishCleaning, 'Avsluta', isLoadingInProgress, errorInProgress, "Det finns inga påbörjade uppdrag just nu.")}
+            </div>
             <h2>Avslutade uppdrag i väntan på återkoppling från kund</h2>
-            {renderJobsTable("", reportedCompletedJobs, null, '', isLoadingReportedCompleted, errorReportedCompleted, "Det finns inga avslutade uppdrag just nu.")}
+            <div className="bookings">
+                {renderJobsTable("", reportedCompletedJobs, null, '', isLoadingReportedCompleted, errorReportedCompleted, "Det finns inga avslutade uppdrag just nu.")}
+            </div>
         </div>
     );
-};
+}
 
-export default BookedJobs;
+    export default BookedJobs;

@@ -20,7 +20,10 @@ export const BookingsProvider = ({ children }) => {
                     },
                 });
 
-                if (response.ok) {
+                if (response.status === 204) {
+                    console.log('No bookings found.');
+                    setBookings([]);
+                } else if (response.ok) {
                     const data = await response.json();
                     setBookings(data);
                 } else {
@@ -34,6 +37,7 @@ export const BookingsProvider = ({ children }) => {
         }
     }, [auth.token]);
 
+
     const fetchReportedCompletedBookings = useCallback(async () => {
         if (auth.token) {
             try {
@@ -45,7 +49,10 @@ export const BookingsProvider = ({ children }) => {
                     },
                 });
 
-                if (response.ok) {
+                if (response.status === 204) {
+                    console.log('No reported completed bookings found.');
+                    setReportedCompletedBookings([]);
+                } else if (response.ok) {
                     const data = await response.json();
                     setReportedCompletedBookings(data);
                 } else {
