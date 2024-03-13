@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from "../../AuthContext";
+import '../../assets/BookedClean.css';
 
 const DownloadPdf = () => {
   const { auth } = useAuth();
@@ -63,32 +64,33 @@ const DownloadPdf = () => {
   };
 
   return (
-    <div>
-      <h2>Mina Fakturor</h2>
-      <table>
-        <thead>
+      <div className="bookings"> {/* Du kan byta ut "bookings" mot ett mer passande klassnamn för fakturor */}
+        <h2>Mina Fakturor</h2>
+        <table>
+          <thead>
           <tr>
-            <th>Faktura ID</th>
-            <th>Belopp</th>
-            <th>Skapad Datum</th>
-            <th>Ladda ner PDF</th>
+            <th className="invoice-header">Faktura ID</th>
+            <th className="invoice-header">Belopp</th>
+            <th className="invoice-header">Skapad Datum</th>
+            <th className="invoice-header">Ladda ner PDF</th>
           </tr>
-        </thead>
-        <tbody>
+          </thead>
+          <tbody>
           {invoices.map((invoice) => (
-            <tr key={invoice.id}>
-              <td>{invoice.id}</td>
-              <td>{invoice.amount}</td>
-              <td>{invoice.createdDate}</td>
-              <td>
-                <button onClick={() => downloadInvoice(invoice.id)}>Ladda ner</button>
-              </td>
-            </tr>
+              <tr key={invoice.id} className="invoice-row">
+                <td className="invoice-data">{invoice.id}</td>
+                <td className="invoice-data">{invoice.amount}</td>
+                <td className="invoice-data">{invoice.createdDate}</td>
+                <td className="invoice-data">
+                  <button className="download-button" onClick={() => downloadInvoice(invoice.id)}>Ladda ner</button>
+                </td>
+              </tr>
           ))}
-        </tbody>
-      </table>
-    </div>
+          </tbody>
+        </table>
+      </div>
   );
 };
+
 
 export default DownloadPdf;
