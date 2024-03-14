@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from "../../AuthContext";
 import UpdateUserModal from './UpdateUserModal';
 
+
 function UserManagement() {
     const [cleaners, setCleaners] = useState([]);
     const [customers, setCustomers] = useState([]);
@@ -102,8 +103,8 @@ function UserManagement() {
 
 
     const renderUserTable = (users, userType) => (
-        <div>
-            <h3>{userType === 'customers' ? 'Kunder' : 'Städare'}</h3>
+        <div className="bookings">
+            <h2>{userType === 'customers' ? 'Kunder' : 'Städare'}</h2>
             <table>
                 <thead>
                 <tr>
@@ -120,10 +121,10 @@ function UserManagement() {
                         <td>{user.firstname} {user.lastname}</td>
                         <td>{user.email}</td>
                         <td>
-                            <div style={{ display: 'flex', justifyContent: 'space-evenly' }}>
-                                <button onClick={() => handleDeleteUser(user.id, userType === 'customers' ? 'kund' : 'städare')} style={{ marginRight: '10px' }}>Ta bort</button>
-                                <button onClick={() => handleUpdateUser(user)} style={{ marginRight: '10px' }}>Uppdatera</button>
-                                {userType === 'customers' && <button onClick={() => handleGenerateInvoice(user)}>Fakturera</button>}
+                            <div className="actions-container">
+                                <button className="user-action-button" onClick={() => handleDeleteUser(user.id, userType === 'customers' ? 'kund' : 'städare')}>Ta bort</button>
+                                <button className="user-action-button" onClick={() => handleUpdateUser(user)}>Uppdatera</button>
+                                {userType === 'customers' && <button className="user-action-button" onClick={() => handleGenerateInvoice(user)}>Fakturera</button>}
                             </div>
                         </td>
                     </tr>
@@ -134,9 +135,12 @@ function UserManagement() {
     );
 
 
+
+
+
     return (
         <div>
-            <h2>Användarhantering</h2>
+            <h1>Användarhantering</h1>
             {renderUserTable(customers, 'customers')}
             {renderUserTable(cleaners, 'cleaners')}
             {showModal && <UpdateUserModal user={selectedUser} onClose={() => setShowModal(false)} onUpdate={onUpdateUser} />}

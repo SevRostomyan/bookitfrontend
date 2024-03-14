@@ -1,4 +1,4 @@
-/* bookings.css */
+/* bookedClean.css */
 
 .bookings {
     width: auto;
@@ -58,4 +58,18 @@ p {
 
 p:last-child {
     font-weight: bold;
+}
+
+
+
+/*Till tabellerna i UserManagement*/
+
+.actions-container {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.user-action-button {
+    margin-right: 10px;
+    /* Du kan lägga till ytterligare stilinställningar här om det behövs */
 }
