@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { useBookings } from '../../BookingsContext';
 import '../../assets/BookedClean.css';
-import DataRefreshButton from '../BookedCleanings/DataRefreshButton';
-import { useAuth } from "../../AuthContext";
+import {useAuth} from "../../AuthContext";
+import DataRefreshButton from "../BookedCleanings/DataRefreshButton";
+/*import DownloadPdf from './DownloadPdf';*/
 
-const Bookings = () => {
+const HanteraAktuellaBokningar = () => {
     const { bookings, fetchBookings } = useBookings();
     const { auth } = useAuth();
     const [isLoading, setIsLoading] = useState(false);
 
+    // Fetch bookings from bookings context
     useEffect(() => {
         fetchBookings();
     }, [fetchBookings]);
@@ -46,7 +48,7 @@ const Bookings = () => {
     return (
         <div className="bookings">
             <DataRefreshButton onClick={fetchBookings} />
-            <h1>Mina bokade städningar</h1>
+            <h1>Mina Aktuella Bokningar</h1>
             {bookings.length === 0 ? (
                 <p>Du har inga bokade städningar.</p>
             ) : (
@@ -102,4 +104,4 @@ const Bookings = () => {
     );
 };
 
-export default Bookings;
+export default HanteraAktuellaBokningar;

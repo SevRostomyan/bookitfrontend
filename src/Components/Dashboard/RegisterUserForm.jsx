@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import {useAuth} from "../../AuthContext";
 
 function RegisterUserForm({ onUserAdded }) {
     const [userData, setUserData] = useState({
@@ -8,6 +9,7 @@ function RegisterUserForm({ onUserAdded }) {
         password: '',
         role: 'KUND'
     });
+    const { auth } = useAuth();
 
     const handleChange = (event) => {
         const { name, value } = event.target;
@@ -15,12 +17,14 @@ function RegisterUserForm({ onUserAdded }) {
     };
 
     const handleSubmit = async (event) => {
+        const token = auth.token;
         event.preventDefault();
         try {
             const response = await fetch('http://localhost:7878/api/auth/register', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(userData)
             });

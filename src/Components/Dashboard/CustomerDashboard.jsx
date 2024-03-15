@@ -1,7 +1,6 @@
 import React from 'react';
 import '../../assets/Dashboard.css';
 import { useNavigate } from "react-router-dom";
-import DownloadPdf from './DownloadPdf';
 import { useAuth } from "../../AuthContext";
 
 
@@ -56,7 +55,7 @@ return (
         </div>
         <div className="dashboard-options">
             <button className="dashboard-button" onClick={handleNewBookingClick}>BOKA</button>
-            <button className="dashboard-button" onClick={handleMyBookingsClick}>MINA BOKNINGAR</button>
+            <button className="dashboard-button" onClick={handleMyBookingsClick}>AKTUELLA BOKNINGAR</button>
             <button className="dashboard-button" onClick={handleHistoryClick}>HISTORIK</button>
             <button className="dashboard-button" onClick={handleInvoicesClick}>MINA FAKTUROR</button>
             {/*<button className="dashboard-button" onClick={handlePaymentMethodsClick}>BETALNINGSMETODER</button>*/}

@@ -26,52 +26,6 @@ const CleaningApproval = () => {
 
 
 
-   /* // Define fetchReportedCompletedBookings function with useCallback
-    const fetchReportedCompletedBookings = useCallback(async () => {
-        try {
-            const response = await fetch('http://localhost:7878/api/bokning/fetchReportedCompletedBookingsByUserId', {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${auth.token}`,
-                    'Content-Type': 'application/json',
-                },
-            });
-
-            if (response.ok) {
-                // Check if the response body is not empty
-                if (response.status !== 204) { // 204 No Content
-                    const data = await response.json();
-                    setCompletedBookings([...data]); // Spread into a new array
-
-                    // Initialize visibility states for each booking
-                    const initialFeedbackVisible = {};
-                    const initialButtonsVisible = {};
-                    data.forEach(booking => {
-                        initialFeedbackVisible[booking.id] = true; // Feedback is initially visible
-                        initialButtonsVisible[booking.id] = true; // Buttons are initially visible
-                    });
-                    setFeedbackVisible(initialFeedbackVisible);
-                    setButtonsVisible(initialButtonsVisible);
-                } else {
-                    // Handle empty response
-                    console.log('No content returned from the server');
-                }
-            } else {
-                console.error('Failed to fetch bookings:', response.status);
-            }
-        } catch (error) {
-            console.error('Error during fetch:', error);
-        }
-    }, [auth.token]); // Dependencies for useCallback*/
-
-
-
-    /*useEffect(() => {
-        fetchReportedCompletedBookings().catch(error => {
-            console.error('Error in fetchReportedCompletedBookings:', error);
-        });
-    }, [auth.token, fetchReportedCompletedBookings]); // Add fetchReportedCompletedBookings as a dependency for useEffect
-*/
 
     useEffect(() => {
         fetchReportedCompletedBookings().catch(error => {

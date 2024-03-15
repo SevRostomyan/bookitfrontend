@@ -72,7 +72,7 @@ function BookingManagement() {
                 throw new Error('Failed to assign cleaning');
             }
             alert('Cleaning successfully assigned!'); // Feedback
-            fetchNotAssignedBookings(); // Uppdatera listan med ej tilldelade bokningar
+            await fetchNotAssignedBookings(); // Uppdatera listan med ej tilldelade bokningar
         } catch (error) {
             console.error('Error:', error);
         }
