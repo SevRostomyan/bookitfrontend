@@ -3,9 +3,8 @@ import { useAuth } from "../../AuthContext";
 import '../../assets/BookedClean.css';
 
 const DownloadPdf = () => {
-  const { auth } = useAuth();
+  const {auth} = useAuth();
   const [invoices, setInvoices] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const fetchInvoices = async () => {
@@ -28,7 +27,8 @@ const DownloadPdf = () => {
       }
     };
 
-    fetchInvoices().then(r =>{} );
+    fetchInvoices().then(r => {
+    });
   }, [auth.token]); // Lägg till auth.token som en beroende
 
   const downloadInvoice = async (invoiceId) => {
@@ -64,14 +64,16 @@ const DownloadPdf = () => {
   };
 
   return (
-      <div className="bookings"> {/* Du kan byta ut "bookings" mot ett mer passande klassnamn för fakturor */}
+      <div className="bookings">
         <h2>Mina Fakturor</h2>
         <table>
           <thead>
           <tr>
             <th className="invoice-header">Faktura ID</th>
             <th className="invoice-header">Belopp</th>
-            <th className="invoice-header">Skapad Datum</th>
+            <th className="invoice-header">Fakturadatum</th>
+            <th className="invoice-header">Förfallodatum</th>
+            <th className="invoice-header">Tjänst</th>
             <th className="invoice-header">Ladda ner PDF</th>
           </tr>
           </thead>
@@ -79,10 +81,12 @@ const DownloadPdf = () => {
           {invoices.map((invoice) => (
               <tr key={invoice.id} className="invoice-row">
                 <td className="invoice-data">{invoice.id}</td>
-                <td className="invoice-data">{invoice.amount}</td>
-                <td className="invoice-data">{invoice.createdDate}</td>
+                <td className="invoice-data">{invoice.totaltBelopp}</td>
+                <td className="invoice-data">{invoice.invoiceDate}</td>
+                <td className="invoice-data">{invoice.förfallodatum}</td>
+                <td className="invoice-data">{invoice.tjänstTyp || 'Ej tillgänglig'}</td>
                 <td className="invoice-data">
-                  <button className="download-button" onClick={() => downloadInvoice(invoice.id)}>Ladda ner</button>
+                  <button className="user-action-button" onClick={() => downloadInvoice(invoice.id)}>Ladda ner</button>
                 </td>
               </tr>
           ))}
@@ -90,7 +94,6 @@ const DownloadPdf = () => {
         </table>
       </div>
   );
-};
 
-
-export default DownloadPdf;
+}
+  export default DownloadPdf;

@@ -71,5 +71,14 @@ p:last-child {
 
 .user-action-button {
     margin-right: 10px;
-    /* Du kan lägga till ytterligare stilinställningar här om det behövs */
+    padding: 5px 10px; /* Justera efter behov */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    text-align: center;
+}
+
+.user-action-button:hover {
+    background-color: rgba(0, 123, 254, 0.89); /* Mörkare färg vid hover */
 }
