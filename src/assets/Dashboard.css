@@ -124,3 +124,8 @@ th {
     padding: 20px;
     margin-bottom: 20px; /* Lägg till marginaler vid behov */
 }
+
+.h2-omsättning {
+    color: white;
+    margin-top: 20px;
+}
